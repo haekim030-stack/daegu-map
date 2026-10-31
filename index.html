@@ -150,13 +150,16 @@ a { color: inherit; }
 .hint .ic { width: 18px; height: 18px; color: var(--ink-3); }
 
 /* ---------- 바텀시트 ---------- */
-.sheet { position: absolute; left: 0; right: 0; bottom: 0; z-index: 850; max-height: 60%;
+.sheet { position: absolute; left: 0; right: 0; top: 0; bottom: 0; z-index: 850;
   display: flex; flex-direction: column; background: var(--bg); border-radius: var(--r-l) var(--r-l) 0 0; box-shadow: var(--e2);
-  transform: translateY(105%); transition: transform 320ms var(--ease); }
-.sheet.open { transform: translateY(0); }
-.sheet.collapsed .sheet-list { display: none; }
+  transform: translateY(105%); transition: transform 320ms var(--ease); will-change: transform; }
+/* 시트가 끝까지 올라가기 전에는 목록 대신 시트 자체가 움직임 (네이버지도 방식) */
+.sheet:not(.full) .sheet-list { overflow: hidden; }
+.sheet.full { border-radius: 0; }
+/* 목록을 끝까지 올리면 안내문·구역 칩도 접어서 목록 공간을 최대로 */
+#app.sheet-full .tip, #app.sheet-full #areaChips { display: none; }
 .sheet-handle, .sheet-head, .sheet .chips { flex: none; }
-.sheet-handle { width: 100%; padding: 10px 0 4px; touch-action: none; }
+.sheet-handle { width: 100%; padding: 10px 0 6px; touch-action: none; }
 .sheet-handle::before { content: ""; display: block; width: 36px; height: 4px; margin: 0 auto; border-radius: 2px; background: var(--line); }
 .sheet-head { padding: var(--s1) var(--s4) var(--s3); }
 .back-btn { display: inline-flex; align-items: center; gap: 2px; height: 32px; padding: 0 var(--s3) 0 6px; margin-left: -6px;
@@ -295,7 +298,9 @@ a { color: inherit; }
 .load-error code { background: var(--surface-2); padding: 2px 6px; border-radius: 6px; }
 
 @media (min-width: 720px) {
-  .sheet { left: var(--s4); right: auto; bottom: var(--s4); width: 400px; max-height: calc(100% - 32px); border-radius: var(--r-l); }
+  .sheet { left: var(--s4); right: auto; top: var(--s4); bottom: var(--s4); width: 400px; border-radius: var(--r-l); }
+  .sheet .sheet-list { overflow-y: auto !important; }
+  .sheet-handle { display: none; }
   .modal { left: 50%; width: 480px; transform: translateX(-50%); box-shadow: var(--e2); }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -773,8 +778,8 @@ a { color: inherit; }
 
   function fitArea(animate = true) {
     const a = areaEls[S.currentArea];
-    const sheet = $('#sheet'), wide = window.innerWidth >= 720;
-    const bottom = wide ? 0 : sheet.offsetHeight, left = wide ? sheet.offsetWidth + 32 : 0;
+    const wide = isWide();
+    const bottom = sheetCover(), left = wide ? $('#sheet').offsetWidth + 32 : 0;
     if (!a) { goTo(viewFor(overviewBounds(), { pad: 14, bottom, left }), animate); return; }
     const R = a.zoomUnits;
     goTo(viewFor([a.ax - R, a.ay - R, a.ax + R, a.ay + R], { pad: 0, bottom, left, top: 24 }), animate);
@@ -783,7 +788,7 @@ a { color: inherit; }
   function onResize() {
     if (!SHAPE) return;
     measure();
-    if (S.currentArea) { layoutLabels(overviewView()); fitArea(false); } else fitOverview(false);
+    if (S.currentArea) { layoutLabels(overviewView()); setSnap(snap, false); fitArea(false); } else fitOverview(false);
   }
 
   /* =========================================================
@@ -858,8 +863,8 @@ a { color: inherit; }
     const b = e.target.closest('[data-filter]');
     if (!b) return;
     S.filter = b.dataset.filter;
-    $('#sheet').classList.remove('collapsed');
     renderSheet();
+    if (snap === 'peek') setSnap('half');
   });
 
   function bindCardList(el) {
@@ -879,29 +884,26 @@ a { color: inherit; }
 
   function selectArea(id) {
     if (!S.areaById[id]) return;
-    const sheet = $('#sheet');
-    if (S.currentArea === id) { sheet.classList.remove('collapsed'); return; }
+    if (S.currentArea === id) { setSnap('half'); return; }
     const fromOverview = !S.currentArea;
     S.currentArea = id;
     S.filter = 'all';
-    sheet.classList.remove('collapsed');
-    sheet.classList.add('open');
-    sheet.setAttribute('aria-hidden', 'false');
-    $('#sheetList').scrollTop = 0;
+    sheetEl.classList.add('open');
+    sheetEl.setAttribute('aria-hidden', 'false');
     $('#hint').hidden = true;
     renderAreaChips();
     renderSheet();
     styleAreas();
-    requestAnimationFrame(() => fitArea(true));
+    requestAnimationFrame(() => setSnap('half'));
     if (fromOverview) pushLayer('area', showOverview);
   }
 
   function showOverview() {
     S.currentArea = null;
     S.filter = 'all';
-    const sheet = $('#sheet');
-    sheet.classList.remove('open');
-    sheet.setAttribute('aria-hidden', 'true');
+    sheetEl.classList.remove('open');
+    sheetEl.setAttribute('aria-hidden', 'true');
+    hideSheet();
     $('#hint').hidden = false;
     renderAreaChips();
     styleAreas();
@@ -910,22 +912,87 @@ a { color: inherit; }
 
   $('#backBtn').addEventListener('click', () => { if (S.currentArea) closeTop(); });
 
-  /* 시트 손잡이: 탭하면 접기/펼치기, 아래로 스와이프하면 접기 */
-  (function sheetGesture() {
-    const handle = $('#sheetHandle'), sheet = $('#sheet');
-    let y0 = null;
-    handle.addEventListener('click', () => sheet.classList.toggle('collapsed'));
-    sheet.addEventListener('touchstart', e => {
-      if (e.target.closest('.sheet-list') || e.target.closest('.chips')) return;
-      y0 = e.touches[0].clientY;
+  /* =========================================================
+   * 바텀시트 3단계 (접힘 / 반 / 전체) — 끌어서 놓으면 가까운 단계로 붙음
+   * ========================================================= */
+  const sheetEl = $('#sheet'), listEl = $('#sheetList'), wrapEl = $('.map-wrap');
+  let snap = 'half', sheetY = 0;
+  const isWide = () => window.innerWidth >= 720;
+
+  function snapY(name) {                        // 시트 위쪽이 지도 영역 위에서 얼마나 내려와 있는지(px)
+    const h = wrapEl.clientHeight;
+    const peek = Math.min(h, listEl.offsetTop + 8);          // 손잡이 + 제목 + 필터까지만 보이게
+    const vis = name === 'full' ? h : name === 'half' ? Math.min(h, Math.max(peek + 140, Math.round(h * 0.55))) : peek;
+    return Math.max(0, h - vis);
+  }
+  function setSheetY(y, animate) {
+    sheetY = y;
+    sheetEl.style.transition = animate ? '' : 'none';
+    sheetEl.style.transform = `translateY(${y}px)`;
+  }
+  function setSnap(name, animate = true) {
+    snap = name;
+    sheetEl.classList.toggle('full', name === 'full' && !isWide());
+    $('#app').classList.toggle('sheet-full', name === 'full' && !isWide());
+    if (isWide()) { sheetEl.style.transition = animate ? '' : 'none'; sheetEl.style.transform = 'none'; return; }
+    if (name !== 'full') listEl.scrollTop = 0;
+    setSheetY(snapY(name), animate);
+    if (S.currentArea && name !== 'full') requestAnimationFrame(() => fitArea(animate));
+  }
+  function hideSheet() {
+    sheetEl.classList.remove('full');
+    $('#app').classList.remove('sheet-full');
+    sheetEl.style.transition = '';
+    sheetEl.style.transform = 'translateY(105%)';
+  }
+  /** 지도에서 시트가 가리는 높이 (지도를 맞출 때 사용) */
+  function sheetCover() {
+    if (isWide()) return 0;
+    return wrapEl.clientHeight - snapY(snap === 'full' ? 'half' : snap);
+  }
+
+  $('#sheetHandle').addEventListener('click', () => setSnap(snap === 'full' ? 'half' : 'full'));
+
+  (function sheetDrag() {
+    let st = null;
+    sheetEl.addEventListener('touchstart', e => {
+      if (isWide() || !S.currentArea) return;
+      const tp = e.touches[0];
+      st = { x0: tp.clientX, y0: tp.clientY, y: sheetY, startY: sheetY, mode: null,
+             inList: !!e.target.closest('.sheet-list'), lastY: tp.clientY, lastT: performance.now(), v: 0 };
     }, { passive: true });
-    sheet.addEventListener('touchend', e => {
-      if (y0 === null) return;
-      const dy = e.changedTouches[0].clientY - y0;
-      y0 = null;
-      if (dy > 40) sheet.classList.add('collapsed');
-      else if (dy < -40) sheet.classList.remove('collapsed');
-    });
+
+    sheetEl.addEventListener('touchmove', e => {
+      if (!st) return;
+      const tp = e.touches[0], dx = tp.clientX - st.x0, dy = tp.clientY - st.y0;
+      if (!st.mode) {
+        if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
+        if (Math.abs(dx) > Math.abs(dy)) { st = null; return; }                     // 가로 스크롤(필터 칩)
+        if (snap === 'full' && st.inList && (listEl.scrollTop > 0 || dy < 0)) { st = null; return; }  // 목록 스크롤
+        st.mode = 'drag';
+        sheetEl.style.transition = 'none';
+      }
+      e.preventDefault();
+      const y = Math.max(0, Math.min(snapY('peek') + 40, st.startY + dy));
+      setSheetY(y, false);
+      st.y = y;
+      const now = performance.now();
+      st.v = (tp.clientY - st.lastY) / Math.max(1, now - st.lastT);              // px/ms, +면 아래로
+      st.lastY = tp.clientY; st.lastT = now;
+    }, { passive: false });
+
+    const end = () => {
+      if (!st || st.mode !== 'drag') { st = null; return; }
+      const y = st.y, half = snapY('half');
+      let target;
+      if (st.v > 0.4) target = y < half ? 'half' : 'peek';
+      else if (st.v < -0.4) target = y > half ? 'half' : 'full';
+      else target = ['full', 'half', 'peek'].reduce((b, n) => Math.abs(snapY(n) - y) < Math.abs(snapY(b) - y) ? n : b, 'half');
+      st = null;
+      setSnap(target);
+    };
+    sheetEl.addEventListener('touchend', end);
+    sheetEl.addEventListener('touchcancel', end);
   })();
 
   /* =========================================================
