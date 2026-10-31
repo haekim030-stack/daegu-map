@@ -11,8 +11,6 @@
     "hours_ko": "",
     "address_ko": "대구 동구 동부로 158-7 1층",
     "naver_url": "https://naver.me/FNtZqKgr",
-    "lat": null,
-    "lng": null,
     "photos": [
       "images/hyangtaek/logo.jpg"
     ],
@@ -131,8 +129,6 @@
     "hours_ko": "",
     "address_ko": "대구 중구 달구벌대로 2077 지하1층",
     "naver_url": "https://naver.me/xG0oW87h",
-    "lat": null,
-    "lng": null,
     "photos": [],
     "menu": []
   },
@@ -146,8 +142,6 @@
     "desc_ko": "",
     "hours_ja": "",
     "hours_ko": "",
-    "lat": null,
-    "lng": null,
     "photos": [],
     "menu": []
   },
@@ -163,8 +157,6 @@
     "hours_ko": "",
     "address_ko": "대구 중구 중앙대로77길 22 (종로2가)",
     "naver_url": "https://naver.me/F93m22og",
-    "lat": null,
-    "lng": null,
     "photos": [],
     "menu": []
   }

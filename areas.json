@@ -7,7 +7,7 @@
     "desc_ko": "",
     "lat": 35.8793,
     "lng": 128.6285,
-    "radius": 500,
+    "radius": 2500,
     "color": "#3a7bd5"
   },
   {
@@ -18,7 +18,7 @@
     "desc_ko": "",
     "lat": 35.869,
     "lng": 128.595,
-    "radius": 600,
+    "radius": 2500,
     "color": "#e4572e"
   }
 ]
