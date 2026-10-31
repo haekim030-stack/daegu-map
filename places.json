@@ -5,16 +5,119 @@
     "category": "restaurant",
     "name_ko": "향택 본점",
     "name_ja": "ヒャンテク 本店",
-    "desc_ja": "",
-    "desc_ko": "",
+    "desc_ja": "国産の素材にこだわり、すっきりと新鮮な韓国料理を出すお店。丼ものと焼きものが中心です。",
+    "desc_ko": "우리 땅에서 나는 재료로 깨끗하고 신선한 한식을 내는 집. 덮밥과 구이류가 메뉴판의 중심이에요.",
     "hours_ja": "",
     "hours_ko": "",
     "address_ko": "대구 동구 동부로 158-7 1층",
     "naver_url": "https://naver.me/FNtZqKgr",
     "lat": null,
     "lng": null,
-    "photos": [],
-    "menu": []
+    "photos": [
+      "images/hyangtaek/logo.jpg"
+    ],
+    "menu": [
+      {
+        "name_ko": "삼치곤드레밥",
+        "name_ja": "サワラとコンドゥレの丼",
+        "price": 14000,
+        "photo": "images/hyangtaek/samchi-gondre.jpg",
+        "desc_ko": "구운 삼치와 향긋한 곤드레, 버섯조림을 담은 담백한 덮밥",
+        "desc_ja": "焼いたサワラと香り高いコンドゥレ（高麗アザミ）、きのこの煮物をのせた、あっさり味の丼",
+        "signature": true
+      },
+      {
+        "name_ko": "가지된장덮밥",
+        "name_ja": "焼きナスと味噌の丼",
+        "price": 13000,
+        "photo": "images/hyangtaek/gaji-doenjang.jpg",
+        "desc_ko": "구운 가지와 깊은 강된장에 향긋한 부추를 더한 고소한 덮밥",
+        "desc_ja": "焼きナスにコクのあるカンドェンジャン（韓国味噌）と香りのよいニラを合わせた、香ばしい丼",
+        "signature": true
+      },
+      {
+        "name_ko": "소불고기덮밥",
+        "name_ja": "牛プルコギ丼",
+        "price": 14000,
+        "photo": "images/hyangtaek/sobulgogi.jpg",
+        "desc_ko": "달큰한 양념의 불고기와 향긋한 표고버섯, 쪽파를 더한 덮밥",
+        "desc_ja": "甘めのタレで味付けしたプルコギに、香り高い椎茸と細ねぎをのせた丼"
+      },
+      {
+        "name_ko": "육회비빔밥",
+        "name_ja": "ユッケビビンバ",
+        "price": 14000,
+        "photo": "images/hyangtaek/yukhoe-bibimbap.jpg",
+        "desc_ko": "국내산 우둔살 육회와 달큰한 배, 아삭한 채소를 담은 비빔밥",
+        "desc_ja": "国産牛もも肉のユッケに、甘い梨とシャキシャキ野菜を合わせたビビンバ"
+      },
+      {
+        "name_ko": "청어알비빔면",
+        "name_ja": "ニシンの卵のビビン麺",
+        "price": 13000,
+        "photo": "images/hyangtaek/cheongeoal-bibimmyeon.jpg",
+        "desc_ko": "고소한 들기름에 청어알과 우삼겹구이, 향긋한 깻잎을 더한 비빔면",
+        "desc_ja": "香ばしいエゴマ油に、ニシンの卵と焼いた牛バラ肉、香りのよいエゴマの葉を合わせた和え麺"
+      },
+      {
+        "name_ko": "참나물오징어덮밥",
+        "name_ja": "チャムナムルとイカの丼（辛口）",
+        "price": 13000,
+        "photo": "images/hyangtaek/ojingeo.jpg",
+        "desc_ko": "매콤한 오징어와 아삭한 콩나물, 향긋한 참나물을 더한 덮밥",
+        "desc_ja": "ピリ辛のイカにシャキシャキのもやし、香りのよい山菜チャムナムルをのせた丼"
+      },
+      {
+        "name_ko": "더덕버섯구이",
+        "name_ja": "トドクときのこの甘辛焼き",
+        "price": 9000,
+        "photo": "images/hyangtaek/deodeok.jpg",
+        "desc_ko": "향긋한 더덕과 버섯에 매콤달콤한 양념을 더한 건강 별미",
+        "desc_ja": "香り高いトドク（ツルニンジン）ときのこを、甘辛いタレで焼いたヘルシーな一品",
+        "signature": true
+      },
+      {
+        "name_ko": "한판갈비",
+        "name_ja": "ハンパンカルビ（一枚焼きカルビ）",
+        "price": 10000,
+        "photo": "images/hyangtaek/galbi.jpg",
+        "desc_ko": "부드러운 갈비에 달큰한 간장양념을 더한 촉촉한 구이",
+        "desc_ja": "やわらかいカルビを、甘めの醤油ダレでしっとり焼き上げた一品",
+        "signature": true
+      },
+      {
+        "name_ko": "청송식 닭불고기",
+        "name_ja": "青松（チョンソン）風 タッ・プルコギ",
+        "price": 9000,
+        "photo": "images/hyangtaek/dakbulgogi.jpg",
+        "desc_ko": "곱게 다진 닭고기에 담백한 양념을 더해 구워낸 청송식 별미",
+        "desc_ja": "細かく刻んだ鶏肉をあっさり味のタレで焼いた、青松地方風の一品"
+      },
+      {
+        "name_ko": "한판버섯",
+        "name_ja": "ハンパンきのこ（きのこのジョン）",
+        "price": 6000,
+        "photo": "images/hyangtaek/mushroom-jeon.jpg",
+        "desc_ko": "각종 향긋한 버섯을 노릇하게 부쳐낸 담백하고 고소한 전",
+        "desc_ja": "いろいろなきのこをこんがり焼き上げた、あっさり香ばしいジョン（韓国風お焼き）"
+      },
+      {
+        "name_ko": "향택 식혜 / 오미자 / 수정과 (180ml)",
+        "name_ja": "シッケ／オミジャ茶／水正果（180ml）",
+        "price": 2000,
+        "photo": "",
+        "desc_ko": "",
+        "desc_ja": "韓国の伝統ドリンクから選べます"
+      },
+      {
+        "name_ko": "코카콜라 / 제로콜라 / 스프라이트",
+        "name_ja": "コーラ／コーラゼロ／スプライト",
+        "price": 2000,
+        "photo": "",
+        "desc_ko": "",
+        "desc_ja": ""
+      }
+    ]
   },
   {
     "id": "geumgeum-the-hyundai",

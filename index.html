@@ -192,6 +192,8 @@
   .menu-info { padding: 7px 9px 9px; }
   .menu-name { font-weight: 700; font-size: 13.5px; line-height: 1.3; }
   .menu-ko { font-size: 12px; color: var(--muted); margin-top: 1px; }
+  .menu-desc { font-size: 11.5px; color: #55606b; line-height: 1.45; margin-top: 4px; }
+  .tag.sig { background: #b42318; color: #fff; margin-bottom: 4px; display: inline-block; }
   .menu-price { font-size: 13px; margin-top: 4px; font-weight: 600; }
 
   .actions {
@@ -326,6 +328,7 @@
       no_loc: '地図に位置なし',
       hours: '営業時間',
       menu: 'メニュー',
+      signature: '看板メニュー',
       fav_off: '♡ 行きたい',
       fav_on: '♥ 行きたい！',
       naver: 'NAVER Map',
@@ -351,6 +354,7 @@
       no_loc: '지도 위치 없음',
       hours: '영업시간',
       menu: '메뉴',
+      signature: '대표',
       fav_off: '♡ 가고 싶어요',
       fav_on: '♥ 가고 싶어요!',
       naver: '네이버지도',
@@ -760,8 +764,10 @@
             ? `<button class="menu-photo" type="button" data-zoom="${esc(m.photo)}">${imgTag(m.photo, c, mn.main)}</button>`
             : `<div class="menu-photo">${placeholder(c)}</div>`}
           <div class="menu-info">
+            ${m.signature ? `<span class="tag sig">${esc(t('signature'))}</span>` : ''}
             <div class="menu-name">${esc(mn.main)}</div>
             ${mn.sub ? `<div class="menu-ko">${esc(mn.sub)}</div>` : ''}
+            ${txt(m, 'desc') ? `<div class="menu-desc">${esc(txt(m, 'desc'))}</div>` : ''}
             ${formatPrice(m.price) ? `<div class="menu-price">${esc(formatPrice(m.price))}</div>` : ''}
           </div>
         </div>`;
