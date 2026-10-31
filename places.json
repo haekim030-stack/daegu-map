@@ -22,7 +22,9 @@
         "photo": "images/hyangtaek/samchi-gondre.jpg",
         "desc_ko": "구운 삼치와 향긋한 곤드레, 버섯조림을 담은 담백한 덮밥",
         "desc_ja": "焼いたサワラと香り高いコンドゥレ（高麗アザミ）、きのこの煮物をのせた、あっさり味の丼",
-        "signature": true
+        "signature": true,
+        "section_ko": "덮밥·식사",
+        "section_ja": "丼・ごはん"
       },
       {
         "name_ko": "가지된장덮밥",
@@ -31,7 +33,9 @@
         "photo": "images/hyangtaek/gaji-doenjang.jpg",
         "desc_ko": "구운 가지와 깊은 강된장에 향긋한 부추를 더한 고소한 덮밥",
         "desc_ja": "焼きナスにコクのあるカンドェンジャン（韓国味噌）と香りのよいニラを合わせた、香ばしい丼",
-        "signature": true
+        "signature": true,
+        "section_ko": "덮밥·식사",
+        "section_ja": "丼・ごはん"
       },
       {
         "name_ko": "소불고기덮밥",
@@ -39,7 +43,9 @@
         "price": 14000,
         "photo": "images/hyangtaek/sobulgogi.jpg",
         "desc_ko": "달큰한 양념의 불고기와 향긋한 표고버섯, 쪽파를 더한 덮밥",
-        "desc_ja": "甘めのタレで味付けしたプルコギに、香り高い椎茸と細ねぎをのせた丼"
+        "desc_ja": "甘めのタレで味付けしたプルコギに、香り高い椎茸と細ねぎをのせた丼",
+        "section_ko": "덮밥·식사",
+        "section_ja": "丼・ごはん"
       },
       {
         "name_ko": "육회비빔밥",
@@ -47,7 +53,9 @@
         "price": 14000,
         "photo": "images/hyangtaek/yukhoe-bibimbap.jpg",
         "desc_ko": "국내산 우둔살 육회와 달큰한 배, 아삭한 채소를 담은 비빔밥",
-        "desc_ja": "国産牛もも肉のユッケに、甘い梨とシャキシャキ野菜を合わせたビビンバ"
+        "desc_ja": "国産牛もも肉のユッケに、甘い梨とシャキシャキ野菜を合わせたビビンバ",
+        "section_ko": "덮밥·식사",
+        "section_ja": "丼・ごはん"
       },
       {
         "name_ko": "청어알비빔면",
@@ -55,7 +63,9 @@
         "price": 13000,
         "photo": "images/hyangtaek/cheongeoal-bibimmyeon.jpg",
         "desc_ko": "고소한 들기름에 청어알과 우삼겹구이, 향긋한 깻잎을 더한 비빔면",
-        "desc_ja": "香ばしいエゴマ油に、ニシンの卵と焼いた牛バラ肉、香りのよいエゴマの葉を合わせた和え麺"
+        "desc_ja": "香ばしいエゴマ油に、ニシンの卵と焼いた牛バラ肉、香りのよいエゴマの葉を合わせた和え麺",
+        "section_ko": "덮밥·식사",
+        "section_ja": "丼・ごはん"
       },
       {
         "name_ko": "참나물오징어덮밥",
@@ -63,7 +73,9 @@
         "price": 13000,
         "photo": "images/hyangtaek/ojingeo.jpg",
         "desc_ko": "매콤한 오징어와 아삭한 콩나물, 향긋한 참나물을 더한 덮밥",
-        "desc_ja": "ピリ辛のイカにシャキシャキのもやし、香りのよい山菜チャムナムルをのせた丼"
+        "desc_ja": "ピリ辛のイカにシャキシャキのもやし、香りのよい山菜チャムナムルをのせた丼",
+        "section_ko": "덮밥·식사",
+        "section_ja": "丼・ごはん"
       },
       {
         "name_ko": "더덕버섯구이",
@@ -72,7 +84,9 @@
         "photo": "images/hyangtaek/deodeok.jpg",
         "desc_ko": "향긋한 더덕과 버섯에 매콤달콤한 양념을 더한 건강 별미",
         "desc_ja": "香り高いトドク（ツルニンジン）ときのこを、甘辛いタレで焼いたヘルシーな一品",
-        "signature": true
+        "signature": true,
+        "section_ko": "곁들임",
+        "section_ja": "一品料理"
       },
       {
         "name_ko": "한판갈비",
@@ -81,7 +95,9 @@
         "photo": "images/hyangtaek/galbi.jpg",
         "desc_ko": "부드러운 갈비에 달큰한 간장양념을 더한 촉촉한 구이",
         "desc_ja": "やわらかいカルビを、甘めの醤油ダレでしっとり焼き上げた一品",
-        "signature": true
+        "signature": true,
+        "section_ko": "곁들임",
+        "section_ja": "一品料理"
       },
       {
         "name_ko": "청송식 닭불고기",
@@ -89,7 +105,9 @@
         "price": 9000,
         "photo": "images/hyangtaek/dakbulgogi.jpg",
         "desc_ko": "곱게 다진 닭고기에 담백한 양념을 더해 구워낸 청송식 별미",
-        "desc_ja": "細かく刻んだ鶏肉をあっさり味のタレで焼いた、青松地方風の一品"
+        "desc_ja": "細かく刻んだ鶏肉をあっさり味のタレで焼いた、青松地方風の一品",
+        "section_ko": "곁들임",
+        "section_ja": "一品料理"
       },
       {
         "name_ko": "한판버섯",
@@ -97,7 +115,9 @@
         "price": 6000,
         "photo": "images/hyangtaek/mushroom-jeon.jpg",
         "desc_ko": "각종 향긋한 버섯을 노릇하게 부쳐낸 담백하고 고소한 전",
-        "desc_ja": "いろいろなきのこをこんがり焼き上げた、あっさり香ばしいジョン（韓国風お焼き）"
+        "desc_ja": "いろいろなきのこをこんがり焼き上げた、あっさり香ばしいジョン（韓国風お焼き）",
+        "section_ko": "곁들임",
+        "section_ja": "一品料理"
       },
       {
         "name_ko": "향택 식혜 / 오미자 / 수정과 (180ml)",
@@ -105,7 +125,9 @@
         "price": 2000,
         "photo": "",
         "desc_ko": "",
-        "desc_ja": "韓国の伝統ドリンクから選べます"
+        "desc_ja": "韓国の伝統ドリンクから選べます",
+        "section_ko": "음료",
+        "section_ja": "ドリンク"
       },
       {
         "name_ko": "코카콜라 / 제로콜라 / 스프라이트",
@@ -113,7 +135,9 @@
         "price": 2000,
         "photo": "",
         "desc_ko": "",
-        "desc_ja": ""
+        "desc_ja": "",
+        "section_ko": "음료",
+        "section_ja": "ドリンク"
       }
     ]
   },
@@ -123,14 +147,178 @@
     "category": "restaurant",
     "name_ko": "금금 더현대 대구점",
     "name_ja": "クムクム ザ・現代大邱店",
-    "desc_ja": "",
-    "desc_ko": "",
+    "desc_ja": "ザ・現代大邱（デパート）の地下1階にある韓国料理店。ククス（麺）や丼、ジョン（チヂミ）を、すっきりした一膳で楽しめます。",
+    "desc_ko": "더현대 대구 지하 1층의 한식집. 국수와 덮밥, 전을 한 상으로 깔끔하게 내요.",
     "hours_ja": "",
     "hours_ko": "",
     "address_ko": "대구 중구 달구벌대로 2077 지하1층",
     "naver_url": "https://naver.me/xG0oW87h",
-    "photos": [],
-    "menu": []
+    "photos": [
+      "images/geumgeum/bori-doenjang-guksu.jpg",
+      "images/geumgeum/suyuk.jpg"
+    ],
+    "menu": [
+      {
+        "section_ko": "식사",
+        "section_ja": "お食事",
+        "name_ko": "보리된장 고기국수",
+        "name_ja": "麦味噌の肉ククス",
+        "price": 13500,
+        "photo": "images/geumgeum/bori-doenjang-guksu.jpg",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "식사",
+        "section_ja": "お食事",
+        "name_ko": "들기름통밀국수",
+        "name_ja": "エゴマ油の全粒粉ククス",
+        "price": 10000,
+        "photo": "images/geumgeum/deulgireum-guksu.jpg",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "식사",
+        "section_ja": "お食事",
+        "name_ko": "얼큰소갈비국수",
+        "name_ja": "ピリ辛牛カルビククス",
+        "price": 14000,
+        "photo": "images/geumgeum/eolkeun-galbi-guksu.jpg",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "식사",
+        "section_ja": "お食事",
+        "name_ko": "미나리소갈비국밥",
+        "name_ja": "セリと牛カルビのクッパ",
+        "price": 14000,
+        "photo": "images/geumgeum/minari-gukbap.jpg",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "식사",
+        "section_ja": "お食事",
+        "name_ko": "문어간장비빔밥",
+        "name_ja": "タコの醤油ビビンバ",
+        "price": 13500,
+        "photo": "images/geumgeum/muneo-bibimbap.jpg",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "식사",
+        "section_ja": "お食事",
+        "name_ko": "소갈비덮밥",
+        "name_ja": "牛カルビ丼",
+        "price": 13500,
+        "photo": "images/geumgeum/galbi-deopbap.jpg",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "식사",
+        "section_ja": "お食事",
+        "name_ko": "묵은지문어국수",
+        "name_ja": "古漬けキムチとタコのククス",
+        "price": 13500,
+        "photo": "images/geumgeum/mukeunji-muneo-guksu.jpg",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "요리·곁들임",
+        "section_ja": "一品料理",
+        "name_ko": "곤드레양배추쌈밥",
+        "name_ja": "コンドゥレとキャベツの包みご飯",
+        "price": 12000,
+        "photo": "images/geumgeum/gondre-ssambap.jpg",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "요리·곁들임",
+        "section_ja": "一品料理",
+        "name_ko": "묵은지 참치말이",
+        "name_ja": "古漬けキムチのツナ巻き",
+        "price": 9000,
+        "photo": "images/geumgeum/mukeunji-chamchi.jpg",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "요리·곁들임",
+        "section_ja": "一品料理",
+        "name_ko": "명란새우감자전",
+        "name_ja": "明太子とエビのじゃがいもジョン",
+        "price": 9500,
+        "photo": "images/geumgeum/myeongran-jeon.jpg",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "요리·곁들임",
+        "section_ja": "一品料理",
+        "name_ko": "수육정식",
+        "name_ja": "スユク（ゆで豚）定食",
+        "price": 13000,
+        "photo": "images/geumgeum/suyuk.jpg",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "요리·곁들임",
+        "section_ja": "一品料理",
+        "name_ko": "고기완자전 (3개)",
+        "name_ja": "肉団子のジョン（3個）",
+        "price": 10000,
+        "photo": "images/geumgeum/wanja-jeon.jpg",
+        "desc_ko": "1개만 주문하면 3,500원",
+        "desc_ja": "1個なら3,500ウォン"
+      },
+      {
+        "section_ko": "완자전 세트",
+        "section_ja": "ジョン付きセット",
+        "name_ko": "보리된장 고기국수 또는 묵은지문어국수 + 완자전 1개",
+        "name_ja": "麦味噌の肉ククス または 古漬けキムチとタコのククス ＋ 肉団子のジョン1個",
+        "price": 16500,
+        "photo": "",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "완자전 세트",
+        "section_ja": "ジョン付きセット",
+        "name_ko": "문어간장비빔밥 또는 소갈비덮밥 + 완자전 1개",
+        "name_ja": "タコの醤油ビビンバ または 牛カルビ丼 ＋ 肉団子のジョン1個",
+        "price": 16500,
+        "photo": "",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "완자전 세트",
+        "section_ja": "ジョン付きセット",
+        "name_ko": "곤드레양배추쌈밥 + 완자전 1개",
+        "name_ja": "コンドゥレとキャベツの包みご飯 ＋ 肉団子のジョン1個",
+        "price": 15000,
+        "photo": "",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "완자전 세트",
+        "section_ja": "ジョン付きセット",
+        "name_ko": "들기름통밀국수 + 완자전 1개",
+        "name_ja": "エゴマ油の全粒粉ククス ＋ 肉団子のジョン1個",
+        "price": 13000,
+        "photo": "",
+        "desc_ko": "",
+        "desc_ja": ""
+      }
+    ]
   },
   {
     "id": "ttangttang-chicken-land",
@@ -151,13 +339,18 @@
     "category": "cafe",
     "name_ko": "스타벅스 대구종로고택점",
     "name_ja": "スターバックス 大邱鍾路古宅店",
-    "desc_ja": "",
-    "desc_ko": "",
+    "desc_ja": "古い韓屋（伝統家屋）を改装したスターバックス。庭を眺めながら床座の席でコーヒーが飲めて、Bang & Olufsenのスピーカーで音楽を楽しめる部屋もあります。",
+    "desc_ko": "오래된 한옥(고택)을 고쳐 만든 스타벅스. 마당을 바라보며 좌식 자리에 앉아 커피를 마실 수 있고, 뱅앤올룹슨 음향을 들을 수 있는 방도 있어요.",
     "hours_ja": "",
     "hours_ko": "",
     "address_ko": "대구 중구 중앙대로77길 22 (종로2가)",
     "naver_url": "https://naver.me/F93m22og",
-    "photos": [],
+    "photos": [
+      "images/starbucks/1-garden.jpg",
+      "images/starbucks/2-gate.jpg",
+      "images/starbucks/3-floor-seats.jpg",
+      "images/starbucks/4-audio-room.jpg"
+    ],
     "menu": []
   }
 ]

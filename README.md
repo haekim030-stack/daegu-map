@@ -46,7 +46,7 @@ python3 -m http.server 8000
 | `desc_*`, `hours_*` | 소개, 영업시간 (`\n`으로 줄바꿈 가능) |
 | `lat`, `lng` | (선택) 구글맵 버튼이 이 좌표로 열림. 없으면 주소·이름으로 검색. 지도 핀과는 무관 |
 | `photos` | 사진 경로 배열. 비우면 카테고리 아이콘 표시 |
-| `menu` | `{ name_ko, name_ja, price, photo, desc_ko, desc_ja, signature }` 배열. `signature: true`면 "대표" 표시. 비우면 메뉴 섹션 숨김 |
+| `menu` | `{ section_ko, section_ja, name_ko, name_ja, price, photo, desc_ko, desc_ja, signature }` 배열. 같은 `section`끼리 묶여 소제목이 붙고, 사진 있는 메뉴는 2열 카드, 사진 없는 메뉴(음료·세트)는 목록으로 나옴. `signature: true`면 "대표" 표시. 비우면 메뉴 섹션 숨김 |
 | `address_ko` | (선택) 한국어 주소. 상세 화면에 표시되고, 좌표가 없을 때 구글맵 검색에도 쓰임 |
 | `naver_url` | (선택) 네이버 공유 링크(`https://naver.me/...`). 있으면 [네이버지도] 버튼이 이 링크로 바로 열림 |
 | `naver_query` | (선택) 네이버지도 검색어. 체인점처럼 이름만으로 헷갈릴 때 `"OO카페 동성로점"` 식으로 |
@@ -72,6 +72,12 @@ json은 쉼표 하나만 틀려도 전체가 안 열리니, 고친 뒤 로컬에
 장소는 지도에 찍지 않으므로 `places.json`에 좌표를 넣을 필요가 없어요. 구역에 속하는지는 `area_id`로만 정해집니다.
 구역 핀에는 그 구역에서 찜한 장소 개수(♥2 같은 표시)가 붙어요.
 
-지도 색은 `index.html` 맨 위 `:root`의 `--sea-a`, `--sea-b`(바다), `--land`(땅), `--land-label`(구·군 이름) 값만 바꾸면 됩니다.
+## 디자인 바꾸기
+
+색·글자 크기·간격·모서리·그림자는 `index.html` 맨 위 `:root`(디자인 토큰)에만 정의되어 있고, 화면 전체가 이 값만 씁니다. 여기만 고치면 전체 분위기가 같이 바뀌어요.
+- 바탕/글자: `--bg`, `--surface`, `--ink`, `--ink-2`, `--ink-3`
+- 찜(하트) 색: `--heart`
+- 지도: `--sea`, `--sea-2`(바다), `--land`(땅), `--land-edge`(구 경계), `--land-label`(구 이름)
+- 구역 색: `areas.json`의 `color` (비우면 기본 팔레트에서 자동)
 
 지도 모양 데이터 출처: [southkorea-maps](https://github.com/southkorea/southkorea-maps) (통계청 KOSTAT 2013 행정구역). 2013년 자료라 2023년에 편입된 군위군은 빠져 있어요.

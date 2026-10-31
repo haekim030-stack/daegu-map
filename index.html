@@ -3,271 +3,324 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#ffffff">
+<meta name="theme-color" content="#FBF8F4">
 <title>大邱おでかけマップ</title>
 <style>
-  :root {
-    --bg: #ffffff;
-    --fg: #1f2328;
-    --muted: #6a737d;
-    --line: #e6e8eb;
-    --soft: #f5f6f8;
-    --accent: #e8436b;
-    --shadow-box: 0 6px 24px rgba(0,0,0,.14);
-    /* 일러스트 지도 색 (여기만 바꾸면 분위기가 바뀜) */
-    --sea-a: #dff1fc; --sea-b: #bfe0f4;
-    --land: #f8cdd6; --land-label: #e08ba0; --shadow: #a9cde3;
-    --c-restaurant: #e4572e;
-    --c-cafe: #9c6644;
-    --c-activity: #3a7bd5;
-    --font: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN",
-            "Apple SD Gothic Neo", "Noto Sans JP", "Noto Sans KR", "Malgun Gothic", Meiryo, sans-serif;
-  }
-  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--fg); font-family: var(--font); }
-  body { overflow: hidden; }
-  button { font: inherit; color: inherit; cursor: pointer; }
-  [hidden] { display: none !important; }
+/* =============================================================
+ * 디자인 토큰 — 색·글자·간격·모서리·그림자는 전부 여기서만 정의
+ * ============================================================= */
+:root {
+  /* 색: 따뜻한 종이색 바탕 + 먹색 글자 + 포인트(찜) 1색. 구역 색은 areas.json */
+  --bg:        #FBF8F4;
+  --surface:   #FFFFFF;
+  --surface-2: #F4EFE8;
+  --line:      #E8E1D7;
+  --ink:       #26221E;
+  --ink-2:     #5E574F;
+  --ink-3:     #948B80;
+  --heart:     #E5484D;
+  --heart-soft:#FDECEC;
+  --naver:     #03C75A;
 
-  #app { display: flex; flex-direction: column; height: 100vh; height: 100dvh; }
+  /* 일러스트 지도 */
+  --sea:        #EDE5D8;
+  --sea-2:      #E4DACB;
+  --land:       #FFFDF9;
+  --land-edge:  #EADFD0;
+  --land-shadow:#D8CBB8;
+  --land-label: #B4A794;
 
-  /* ---------- header ---------- */
-  header {
-    display: flex; align-items: center; gap: 8px;
-    padding: calc(8px + env(safe-area-inset-top)) 12px 8px;
-    border-bottom: 1px solid var(--line); background: var(--bg); z-index: 5;
-  }
-  header h1 { flex: 1; margin: 0; font-size: 17px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .fav-badge {
-    position: relative; border: 1px solid var(--line); background: var(--bg);
-    border-radius: 999px; height: 36px; min-width: 52px; padding: 0 10px;
-    display: inline-flex; align-items: center; justify-content: center; gap: 4px;
-    font-size: 15px; font-weight: 700; color: var(--accent);
-  }
-  .fav-badge.bump { animation: bump .35s ease; }
-  @keyframes bump { 50% { transform: scale(1.18); } }
-  .lang { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; height: 36px; }
-  .lang button { border: 0; background: transparent; padding: 0 10px; font-size: 13px; color: var(--muted); }
-  .lang button.on { background: var(--fg); color: #fff; font-weight: 700; }
+  /* 글자 크기 */
+  --fs-xs: 11px; --fs-s: 12px; --fs-m: 13.5px; --fs-base: 15px; --fs-l: 17px; --fs-xl: 20px; --fs-2xl: 24px;
+  /* 간격 (4px 단위) */
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 20px; --s6: 24px;
+  /* 모서리 */
+  --r-s: 8px; --r-m: 12px; --r-l: 20px; --r-pill: 999px;
+  /* 그림자 2단계 */
+  --e1: 0 1px 2px rgba(38,34,30,.06), 0 2px 6px rgba(38,34,30,.05);
+  --e2: 0 10px 30px rgba(38,34,30,.14);
+  /* 움직임 */
+  --ease: cubic-bezier(.2,.8,.2,1);
+  --t: 220ms;
 
-  .notice {
-    display: flex; align-items: flex-start; gap: 8px;
-    padding: 8px 12px; background: #fff7e0; border-bottom: 1px solid #f3e2a9;
-    font-size: 12.5px; line-height: 1.45; color: #6b5200;
-  }
-  .notice p { margin: 0; flex: 1; }
-  .notice button { border: 0; background: transparent; font-size: 16px; line-height: 1; padding: 2px 4px; color: #8a6d00; }
+  --font: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN",
+          "Apple SD Gothic Neo", "Noto Sans JP", "Noto Sans KR", "Malgun Gothic", Meiryo, sans-serif;
+}
 
-  .chips {
-    display: flex; gap: 8px; overflow-x: auto; padding: 8px 12px;
-    border-bottom: 1px solid var(--line); background: var(--bg); scrollbar-width: none;
-  }
-  .chips::-webkit-scrollbar { display: none; }
-  .chip {
-    flex: none; border: 1.5px solid var(--line); background: var(--bg);
-    border-radius: 999px; padding: 6px 12px; font-size: 13.5px; white-space: nowrap;
-    display: inline-flex; align-items: center; gap: 6px;
-  }
-  .chip .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--c, #999); }
-  .chip.on { border-color: var(--c, var(--fg)); background: var(--c, var(--fg)); color: #fff; font-weight: 700; }
-  .chip.on .dot { background: #fff; }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink); font-family: var(--font);
+  font-size: var(--fs-base); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+body { overflow: hidden; }
+button { font: inherit; color: inherit; cursor: pointer; border: 0; background: none; padding: 0; }
+a { color: inherit; }
+[hidden] { display: none !important; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 
-  /* ---------- map ---------- */
-  .map-wrap { position: relative; flex: 1; min-height: 0; }
-  #map {
-    position: absolute; inset: 0; overflow: hidden; isolation: isolate;
-    background: linear-gradient(180deg, var(--sea-a), var(--sea-b));
-    touch-action: manipulation; user-select: none; -webkit-user-select: none;
-  }
-  #mapSvg, #leaders { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-  #leaders { pointer-events: none; }
-  #areaLabels, #pins { position: absolute; inset: 0; pointer-events: none; }
-  #pins { z-index: 2; }
-  .shadow path { fill: var(--shadow); stroke: var(--shadow); stroke-width: 6; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
-  .land path { fill: var(--land); stroke: var(--land); stroke-width: 3; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
-  .lines path { fill: none; stroke: #fff; stroke-width: 1.6; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
-  .dlabels text { fill: var(--land-label); font-weight: 700; font-family: var(--font); transition: opacity .3s; pointer-events: none; }
-  #map.zoomed .dlabels text { opacity: 0; }
-  .leader { stroke-width: 1.5; opacity: .85; transition: opacity .2s; }
-  #map.zoomed .leader { opacity: 0; }
-  .hint {
-    position: absolute; left: 50%; bottom: calc(16px + env(safe-area-inset-bottom)); transform: translateX(-50%);
-    background: rgba(31,35,40,.86); color: #fff; padding: 8px 14px; border-radius: 999px;
-    font-size: 13px; white-space: nowrap; z-index: 500; pointer-events: none;
-  }
+.ic { width: 20px; height: 20px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8;
+  stroke-linecap: round; stroke-linejoin: round; display: block; }
+.ic-s { width: 16px; height: 16px; }
 
-  .area-label {
-    position: absolute; left: 0; top: 0; pointer-events: auto; cursor: pointer;
-    background: #fff; border: 2px solid var(--c); border-radius: 12px; padding: 3px 10px;
-    text-align: center; white-space: nowrap; box-shadow: 0 2px 8px rgba(0,0,0,.16);
-    transition: opacity .2s; will-change: transform; line-height: 1.25;
-  }
-  .area-label b { display: block; font-size: 13.5px; color: var(--c); }
-  .area-label small { display: block; font-size: 11px; color: var(--muted); }
-  #map.zoomed .area-label { opacity: 0; pointer-events: none; }
+#app { display: flex; flex-direction: column; height: 100vh; height: 100dvh; }
 
-  .area-pin {
-    position: absolute; left: 0; top: 0; width: 32px; height: 40px; padding: 0; border: 0; background: none;
-    cursor: pointer; pointer-events: auto; will-change: transform; overflow: visible; transition: opacity .25s;
-  }
-  .area-pin .pin-in { display: block; width: 32px; height: 40px; transform-origin: 50% 100%; transition: transform .25s;
-    filter: drop-shadow(0 2px 3px rgba(0,0,0,.35)); }
-  .area-pin .pin-in svg { display: block; overflow: visible; }
-  .area-pin.sel .pin-in { transform: scale(1.3); animation: drop .5s ease-out; }
-  .area-pin.dim { opacity: .45; }
-  @keyframes drop { 0% { translate: 0 -16px; } 60% { translate: 0 2px; } 100% { translate: 0 0; } }
-  .fav-dot {
-    position: absolute; left: 22px; top: -10px; background: #fff; color: var(--accent); border: 1.5px solid var(--accent);
-    border-radius: 999px; font-size: 11px; font-weight: 700; padding: 0 5px; line-height: 17px; white-space: nowrap;
-  }
+/* ---------- 상단 ---------- */
+.topbar { display: flex; align-items: center; gap: var(--s2);
+  padding: calc(var(--s2) + env(safe-area-inset-top)) var(--s4) var(--s2); background: var(--bg); z-index: 5; }
+.brand { flex: 1; min-width: 0; }
+.brand h1 { margin: 0; font-size: var(--fs-l); font-weight: 800; letter-spacing: -.01em; line-height: 1.3;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.brand p { margin: 0; font-size: var(--fs-s); color: var(--ink-3); }
 
-  /* ---------- bottom sheet ---------- */
-  .sheet {
-    position: absolute; left: 0; right: 0; bottom: 0; z-index: 850;
-    max-height: 56%; display: flex; flex-direction: column;
-    background: var(--bg); border-radius: 18px 18px 0 0; box-shadow: 0 -6px 24px rgba(0,0,0,.16);
-    transform: translateY(105%); transition: transform .28s ease;
-  }
-  .sheet.open { transform: translateY(0); }
-  .sheet.collapsed .sheet-list { display: none; }
-  .sheet-handle, .sheet-head, .filters { flex: none; }
-  .sheet-list { flex: 1 1 auto; min-height: 0; }
-  .sheet-handle { border: 0; background: transparent; padding: 8px 0 2px; width: 100%; touch-action: none; }
-  .sheet-handle::before { content: ""; display: block; width: 40px; height: 5px; margin: 0 auto; border-radius: 3px; background: #cfd3d8; }
-  .sheet-head { padding: 2px 14px 6px; }
-  .back-btn { border: 0; background: var(--soft); border-radius: 999px; padding: 5px 12px; font-size: 13px; font-weight: 600; }
-  .sheet-title { display: flex; align-items: baseline; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
-  .sheet-title h2 { margin: 0; font-size: 19px; }
-  .sheet-title .sub { color: var(--muted); font-size: 13px; }
-  .sheet-title .count { margin-left: auto; color: var(--muted); font-size: 12.5px; }
-  .sheet-desc { margin: 4px 0 0; font-size: 13.5px; color: #3b4148; line-height: 1.5; }
-  .filters { display: flex; gap: 6px; overflow-x: auto; padding: 8px 14px 10px; border-bottom: 1px solid var(--line); scrollbar-width: none; }
-  .filters::-webkit-scrollbar { display: none; }
-  .filters .chip { padding: 5px 11px; font-size: 13px; }
-  .sheet-list { overflow-y: auto; padding: 8px 12px calc(16px + env(safe-area-inset-bottom)); -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
-  .empty { text-align: center; color: var(--muted); padding: 24px 8px; font-size: 14px; white-space: pre-line; line-height: 1.6; }
+.icon-btn { width: 40px; height: 40px; border-radius: var(--r-pill); display: inline-flex; align-items: center;
+  justify-content: center; background: var(--surface); box-shadow: var(--e1); flex: none; }
+.fav-btn { width: auto; min-width: 40px; padding: 0 var(--s3); gap: 6px; color: var(--heart);
+  font-weight: 700; font-size: var(--fs-m); }
+.fav-btn .ic { fill: currentColor; stroke: none; width: 18px; height: 18px; }
+.fav-btn.bump { animation: bump .35s var(--ease); }
+@keyframes bump { 50% { transform: scale(1.15); } }
 
-  .card {
-    display: flex; gap: 12px; align-items: stretch; width: 100%; text-align: left;
-    background: var(--bg); border: 1px solid var(--line); border-radius: 14px; padding: 8px; margin-bottom: 8px;
-  }
-  .thumb { flex: none; width: 76px; height: 76px; border-radius: 10px; overflow: hidden; background: var(--soft); }
-  .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .ph { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
-        background: color-mix(in srgb, var(--c) 16%, white); font-size: 30px; }
-  .card-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
-  .card-name { font-weight: 700; font-size: 15px; line-height: 1.3; }
-  .card-ko { font-size: 12.5px; color: var(--muted); }
-  .card-desc { font-size: 12.5px; color: #3b4148; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-top: 2px; }
-  .tags { display: flex; gap: 4px; flex-wrap: wrap; margin-top: auto; padding-top: 4px; }
-  .tag { font-size: 11px; padding: 2px 7px; border-radius: 999px; background: var(--soft); color: #3b4148; }
-  .tag.cat { background: var(--c); color: #fff; }
-  .tag.warn { background: #fdecec; color: #b42318; }
-  .heart-btn { flex: none; align-self: flex-start; border: 0; background: transparent; font-size: 22px; padding: 2px 4px; color: #b9bec5; line-height: 1; }
-  .heart-btn.on { color: var(--accent); }
+.seg { display: inline-flex; padding: 3px; border-radius: var(--r-pill); background: var(--surface-2); flex: none; }
+.seg button { height: 34px; padding: 0 var(--s3); border-radius: var(--r-pill); font-size: var(--fs-s); font-weight: 600; color: var(--ink-3);
+  transition: background var(--t) var(--ease), color var(--t) var(--ease); }
+.seg button.on { background: var(--surface); color: var(--ink); box-shadow: var(--e1); }
 
-  /* ---------- modals ---------- */
-  .modal {
-    position: fixed; inset: 0; z-index: 1000; background: var(--bg);
-    display: flex; flex-direction: column; animation: slideUp .22s ease;
-  }
-  @keyframes slideUp { from { transform: translateY(24px); opacity: 0; } }
-  .modal-bar {
-    display: flex; align-items: center; gap: 8px; min-height: 52px;
-    padding: calc(6px + env(safe-area-inset-top)) 8px 6px; border-bottom: 1px solid var(--line);
-  }
-  .modal-bar .title { flex: 1; font-weight: 700; font-size: 16px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .icon-btn { border: 0; background: var(--soft); width: 38px; height: 38px; border-radius: 50%; font-size: 18px; flex: none; }
-  .modal-body { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+.tip { display: flex; align-items: center; gap: var(--s2); margin: 0 var(--s4) var(--s2); padding: var(--s2) var(--s1) var(--s2) var(--s3);
+  background: var(--surface); border-radius: var(--r-m); box-shadow: var(--e1); font-size: var(--fs-s); color: var(--ink-2); line-height: 1.45; }
+.tip > .ic { color: var(--naver); }
+.tip p { margin: 0; flex: 1; }
+.tip button { width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; color: var(--ink-3); border-radius: var(--r-pill); flex: none; }
+.tip button .ic { width: 16px; height: 16px; }
 
-  .slider { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; background: #111; aspect-ratio: 4 / 3; }
-  .slider::-webkit-scrollbar { display: none; }
-  .slider img { flex: none; width: 100%; height: 100%; object-fit: cover; scroll-snap-align: center; display: block; }
-  .slider .ph { flex: none; width: 100%; height: 100%; scroll-snap-align: center; font-size: 48px; }
-  .slide-count { position: relative; }
-  .slide-count span {
-    position: absolute; right: 10px; bottom: 10px; background: rgba(0,0,0,.6); color: #fff;
-    font-size: 12px; padding: 3px 9px; border-radius: 999px;
-  }
-  .big-ph { aspect-ratio: 16 / 9; display: flex; align-items: center; justify-content: center;
-            font-size: 64px; background: color-mix(in srgb, var(--c) 16%, white); }
+/* 칩: 구역 선택·카테고리 필터 공통 컴포넌트 */
+.chips { display: flex; gap: var(--s2); overflow-x: auto; padding: var(--s1) var(--s4) var(--s3); scrollbar-width: none; }
+.chips::-webkit-scrollbar { display: none; }
+.chip { flex: none; height: 36px; display: inline-flex; align-items: center; gap: 6px; padding: 0 var(--s3);
+  border-radius: var(--r-pill); background: var(--surface); box-shadow: inset 0 0 0 1px var(--line);
+  font-size: var(--fs-m); font-weight: 600; color: var(--ink-2); white-space: nowrap;
+  transition: background var(--t) var(--ease), color var(--t) var(--ease), box-shadow var(--t) var(--ease); }
+.chip .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c, var(--ink-3)); }
+.chip .n { font-size: var(--fs-xs); color: var(--ink-3); font-weight: 600; }
+.chip.on { background: var(--ink); color: #fff; box-shadow: none; }
+.chip.on .dot { box-shadow: 0 0 0 2px #fff; }
+.chip.on .n { color: rgba(255,255,255,.7); }
 
-  .detail-main { padding: 14px 16px 24px; }
-  .detail-main h2 { margin: 0; font-size: 22px; line-height: 1.3; }
-  .detail-main .ko { color: var(--muted); font-size: 14px; margin-top: 2px; }
-  .detail-main .tags { margin: 10px 0 0; }
-  .detail-main p { line-height: 1.65; font-size: 14.5px; margin: 12px 0 0; white-space: pre-line; }
-  .section-title { font-size: 15px; font-weight: 700; margin: 22px 0 8px; padding-top: 14px; border-top: 1px solid var(--line); }
-  .hours { font-size: 14px; white-space: pre-line; line-height: 1.6; }
-  .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .menu-item { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
-  .menu-photo { display: block; width: 100%; aspect-ratio: 1; border: 0; padding: 0; background: var(--soft); }
-  .menu-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .menu-photo .ph { font-size: 34px; }
-  .menu-info { padding: 7px 9px 9px; }
-  .menu-name { font-weight: 700; font-size: 13.5px; line-height: 1.3; }
-  .menu-ko { font-size: 12px; color: var(--muted); margin-top: 1px; }
-  .menu-desc { font-size: 11.5px; color: #55606b; line-height: 1.45; margin-top: 4px; }
-  .tag.sig { background: #b42318; color: #fff; margin-bottom: 4px; display: inline-block; }
-  .menu-price { font-size: 13px; margin-top: 4px; font-weight: 600; }
+/* ---------- 지도 ---------- */
+.map-wrap { position: relative; flex: 1; min-height: 0; }
+#map { position: absolute; inset: 0; overflow: hidden; isolation: isolate; border-radius: var(--r-l) var(--r-l) 0 0;
+  background: radial-gradient(120% 90% at 50% 35%, var(--sea), var(--sea-2));
+  touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+#mapSvg, #leaders { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+#leaders { pointer-events: none; }
+#areaLabels, #pins { position: absolute; inset: 0; pointer-events: none; }
+#pins { z-index: 2; }
+.shadow path { fill: var(--land-shadow); stroke: var(--land-shadow); stroke-width: 4; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.land path { fill: var(--land); stroke: var(--land); stroke-width: 2; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.lines path { fill: none; stroke: var(--land-edge); stroke-width: 1.2; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.dlabels text { fill: var(--land-label); font-weight: 700; font-family: var(--font); letter-spacing: .04em;
+  transition: opacity var(--t) var(--ease); pointer-events: none; }
+#map.zoomed .dlabels text { opacity: 0; }
+.leader { stroke: var(--ink-3); stroke-width: 1; stroke-dasharray: 2 3; transition: opacity var(--t); }
+#map.zoomed .leader { opacity: 0; }
 
-  .actions {
-    display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 8px;
-    padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); border-top: 1px solid var(--line); background: var(--bg);
-  }
-  .act {
-    display: flex; align-items: center; justify-content: center; text-align: center;
-    min-height: 46px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--bg);
-    font-size: 13.5px; font-weight: 700; text-decoration: none; color: var(--fg); padding: 4px 6px; line-height: 1.2;
-  }
-  .act.fav { border-color: var(--accent); color: var(--accent); }
-  .act.fav.on { background: var(--accent); color: #fff; }
-  .act.naver { background: #03c75a; border-color: #03c75a; color: #fff; }
+.area-label { position: absolute; left: 0; top: 0; pointer-events: auto; will-change: transform;
+  display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 var(--s3) 0 10px;
+  background: var(--surface); border-radius: var(--r-pill); box-shadow: var(--e1), 0 0 0 1px rgba(38,34,30,.04);
+  white-space: nowrap; transition: opacity var(--t) var(--ease); }
+.area-label .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--c); flex: none; }
+.area-label b { font-size: var(--fs-m); font-weight: 700; }
+.area-label small { font-size: var(--fs-xs); color: var(--ink-3); }
+#map.zoomed .area-label { opacity: 0; pointer-events: none; }
 
-  .fav-group h3 { display: flex; align-items: center; gap: 8px; font-size: 15px; margin: 18px 0 8px; }
-  .fav-group h3 .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--c); }
-  .fav-wrap { padding: 4px 12px 24px; }
-  .fav-foot { padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); border-top: 1px solid var(--line); }
-  .copy-btn { width: 100%; min-height: 48px; border: 0; border-radius: 12px; background: var(--fg); color: #fff; font-weight: 700; font-size: 15px; }
-  .copy-btn:disabled { opacity: .35; }
-  .copy-fallback { width: 100%; height: 120px; margin-top: 8px; font-size: 13px; border-radius: 10px; border: 1px solid var(--line); padding: 8px; }
+.area-pin { position: absolute; left: 0; top: 0; width: 32px; height: 40px; pointer-events: auto; will-change: transform;
+  overflow: visible; transition: opacity var(--t) var(--ease); }
+.area-pin .pin-in { display: block; width: 32px; height: 40px; transform-origin: 50% 100%;
+  transition: transform var(--t) var(--ease); filter: drop-shadow(0 3px 4px rgba(38,34,30,.28)); }
+.area-pin svg { display: block; overflow: visible; }
+.area-pin.sel .pin-in { transform: scale(1.3); animation: drop .5s var(--ease); }
+.area-pin.dim { opacity: .4; }
+@keyframes drop { 0% { translate: 0 -14px; } 60% { translate: 0 2px; } 100% { translate: 0 0; } }
+.fav-dot { position: absolute; left: 22px; top: -8px; display: inline-flex; align-items: center; gap: 2px;
+  height: 18px; padding: 0 6px; border-radius: var(--r-pill); background: var(--heart); color: #fff;
+  font-size: var(--fs-xs); font-weight: 700; box-shadow: 0 0 0 2px var(--surface); }
+.fav-dot .ic { width: 10px; height: 10px; fill: currentColor; stroke: none; }
 
-  .lightbox { position: fixed; inset: 0; z-index: 2000; background: rgba(0,0,0,.92); display: flex; align-items: center; justify-content: center; }
-  .lightbox img { max-width: 100%; max-height: 100%; object-fit: contain; }
-  .lightbox .icon-btn { position: absolute; top: calc(10px + env(safe-area-inset-top)); right: 10px; background: rgba(255,255,255,.18); color: #fff; }
+.hint { position: absolute; left: 50%; bottom: calc(var(--s4) + env(safe-area-inset-bottom)); transform: translateX(-50%);
+  display: inline-flex; align-items: center; gap: var(--s2); padding: 10px var(--s4); border-radius: var(--r-pill);
+  background: var(--surface); box-shadow: var(--e2); color: var(--ink-2); font-size: var(--fs-m); font-weight: 600;
+  white-space: nowrap; z-index: 500; pointer-events: none; }
+.hint .ic { width: 18px; height: 18px; color: var(--ink-3); }
 
-  .toast {
-    position: fixed; left: 50%; bottom: calc(90px + env(safe-area-inset-bottom)); transform: translate(-50%, 20px);
-    background: rgba(31,35,40,.94); color: #fff; padding: 11px 16px; border-radius: 12px; font-size: 14px;
-    z-index: 3000; opacity: 0; transition: opacity .2s, transform .2s; pointer-events: none;
-    width: max-content; max-width: calc(100% - 32px); text-align: center; line-height: 1.45;
-  }
-  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+/* ---------- 바텀시트 ---------- */
+.sheet { position: absolute; left: 0; right: 0; bottom: 0; z-index: 850; max-height: 60%;
+  display: flex; flex-direction: column; background: var(--bg); border-radius: var(--r-l) var(--r-l) 0 0; box-shadow: var(--e2);
+  transform: translateY(105%); transition: transform 320ms var(--ease); }
+.sheet.open { transform: translateY(0); }
+.sheet.collapsed .sheet-list { display: none; }
+.sheet-handle, .sheet-head, .sheet .chips { flex: none; }
+.sheet-handle { width: 100%; padding: 10px 0 4px; touch-action: none; }
+.sheet-handle::before { content: ""; display: block; width: 36px; height: 4px; margin: 0 auto; border-radius: 2px; background: var(--line); }
+.sheet-head { padding: var(--s1) var(--s4) var(--s3); }
+.back-btn { display: inline-flex; align-items: center; gap: 2px; height: 32px; padding: 0 var(--s3) 0 6px; margin-left: -6px;
+  border-radius: var(--r-pill); font-size: var(--fs-m); font-weight: 600; color: var(--ink-2); }
+.back-btn .ic { width: 18px; height: 18px; }
+.back-btn:active { background: var(--surface-2); }
+.sheet-title { display: flex; align-items: center; gap: var(--s2); margin-top: var(--s2); }
+.sheet-title .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--c); flex: none; }
+.sheet-title h2 { margin: 0; font-size: var(--fs-xl); font-weight: 800; letter-spacing: -.01em; line-height: 1.3; }
+.sheet-title .sub { font-size: var(--fs-m); color: var(--ink-3); }
+.sheet-desc { margin: var(--s1) 0 0; font-size: var(--fs-m); color: var(--ink-2); line-height: 1.6; }
+.sheet .chips { padding: 0 var(--s4) var(--s3); }
+.sheet .chip { height: 32px; font-size: var(--fs-s); padding: 0 var(--s3) 0 10px; }
+.sheet-list { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 0 var(--s4) calc(var(--s4) + env(safe-area-inset-bottom));
+  overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+.empty { text-align: center; color: var(--ink-3); padding: var(--s6) var(--s2); font-size: var(--fs-m); white-space: pre-line; line-height: 1.7; }
 
-  .load-error { position: absolute; inset: 0; z-index: 950; display: flex; align-items: center; justify-content: center; padding: 24px; background: rgba(255,255,255,.95); text-align: center; line-height: 1.7; font-size: 14px; }
-  .load-error code { background: var(--soft); padding: 2px 6px; border-radius: 6px; }
+/* ---------- 장소 카드 ---------- */
+.card { display: flex; gap: var(--s3); align-items: stretch; padding: var(--s3); margin-bottom: var(--s2);
+  background: var(--surface); border-radius: var(--r-m); box-shadow: var(--e1); cursor: pointer;
+  transition: transform 120ms var(--ease); }
+.card:active { transform: scale(.985); }
+.thumb { flex: none; width: 76px; height: 76px; border-radius: var(--r-s); overflow: hidden; background: var(--surface-2); }
+.thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ph { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: var(--surface-2); color: var(--ink-3); }
+.ph .ic { width: 28px; height: 28px; stroke-width: 1.5; }
+.card-body { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.card-name { font-size: var(--fs-base); font-weight: 700; line-height: 1.35; }
+.card-sub { font-size: var(--fs-s); color: var(--ink-3); margin-top: 1px; }
+.card-desc { font-size: var(--fs-s); color: var(--ink-2); line-height: 1.5; margin-top: var(--s1);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.meta { display: flex; align-items: center; gap: var(--s1); margin-top: auto; padding-top: 6px;
+  font-size: var(--fs-xs); font-weight: 600; color: var(--ink-3); }
+.meta .ic { width: 14px; height: 14px; }
+.heart-btn { flex: none; align-self: flex-start; width: 40px; height: 40px; margin: -6px -6px 0 0; border-radius: var(--r-pill);
+  display: inline-flex; align-items: center; justify-content: center; color: var(--ink-3); }
+.heart-btn .ic { width: 22px; height: 22px; }
+.heart-btn.on { color: var(--heart); }
+.heart-btn.on .ic { fill: currentColor; }
 
-  @media (min-width: 720px) {
-    .sheet { left: 12px; right: auto; width: 420px; bottom: 12px; border-radius: 18px; max-height: calc(100% - 24px); }
-    .modal { left: 50%; width: 520px; transform: translateX(-50%); box-shadow: var(--shadow-box); }
-  }
+/* ---------- 전체 화면 (상세·찜 목록) ---------- */
+.modal { position: fixed; inset: 0; z-index: 1000; background: var(--bg); display: flex; flex-direction: column;
+  animation: rise 260ms var(--ease); }
+@keyframes rise { from { transform: translateY(16px); opacity: 0; } }
+.modal-bar { display: flex; align-items: center; gap: var(--s3); min-height: 56px;
+  padding: calc(var(--s2) + env(safe-area-inset-top)) var(--s4) var(--s2); background: var(--bg); }
+.modal-bar .title { flex: 1; min-width: 0; font-size: var(--fs-l); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.modal-body { flex: 1; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+
+.gallery { position: relative; margin: 0 var(--s4); border-radius: var(--r-l); overflow: hidden; background: var(--surface-2); }
+.slider { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; aspect-ratio: 4 / 3; }
+.slider::-webkit-scrollbar { display: none; }
+.slider img, .slider .ph { flex: none; width: 100%; height: 100%; object-fit: cover; scroll-snap-align: center; display: block; }
+.slider .ph { display: flex; }
+.slider .ph .ic { width: 48px; height: 48px; }
+.dots { position: absolute; left: 0; right: 0; bottom: var(--s3); display: flex; justify-content: center; gap: 6px; pointer-events: none; }
+.dots i { width: 6px; height: 6px; border-radius: var(--r-pill); background: rgba(255,255,255,.6); box-shadow: 0 0 2px rgba(0,0,0,.3);
+  transition: width var(--t) var(--ease), background var(--t); }
+.dots i.on { width: 18px; background: #fff; }
+
+.detail { padding: var(--s5) var(--s4) var(--s6); }
+.pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.pill { display: inline-flex; align-items: center; gap: 5px; height: 26px; padding: 0 10px; border-radius: var(--r-pill);
+  background: var(--surface); box-shadow: inset 0 0 0 1px var(--line); font-size: var(--fs-s); font-weight: 600; color: var(--ink-2); }
+.pill .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c); }
+.pill .ic { width: 14px; height: 14px; }
+.detail h2 { margin: var(--s3) 0 0; font-size: var(--fs-2xl); font-weight: 800; letter-spacing: -.015em; line-height: 1.3; }
+.detail .sub { font-size: var(--fs-m); color: var(--ink-3); margin-top: 2px; }
+.detail .lead { margin: var(--s4) 0 0; font-size: var(--fs-base); line-height: 1.75; color: var(--ink-2); white-space: pre-line; }
+.info { margin-top: var(--s4); background: var(--surface); border-radius: var(--r-m); box-shadow: var(--e1); }
+.info-row { display: flex; gap: var(--s3); padding: var(--s3) var(--s4); font-size: var(--fs-m); line-height: 1.55; color: var(--ink-2); white-space: pre-line; }
+.info-row + .info-row { border-top: 1px solid var(--line); }
+.info-row .ic { color: var(--ink-3); width: 18px; height: 18px; margin-top: 1px; }
+.section-h { display: flex; align-items: baseline; gap: var(--s2); margin: var(--s6) 0 0; }
+.section-h h3 { margin: 0; font-size: var(--fs-l); font-weight: 800; }
+.section-h span { font-size: var(--fs-s); color: var(--ink-3); }
+.menu-sec { margin: var(--s4) 0 var(--s2); font-size: var(--fs-s); font-weight: 700; color: var(--ink-3); letter-spacing: .04em; }
+.menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s3); }
+.menu-item { background: var(--surface); border-radius: var(--r-m); overflow: hidden; box-shadow: var(--e1); display: flex; flex-direction: column; }
+.menu-photo { position: relative; display: block; width: 100%; aspect-ratio: 1; background: var(--surface-2); }
+.menu-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.badge { position: absolute; left: var(--s2); top: var(--s2); height: 22px; padding: 0 8px; display: inline-flex; align-items: center;
+  border-radius: var(--r-pill); background: var(--ink); color: #fff; font-size: var(--fs-xs); font-weight: 700; }
+.menu-info { padding: 10px var(--s3) var(--s3); display: flex; flex-direction: column; flex: 1; }
+.menu-name { font-size: var(--fs-m); font-weight: 700; line-height: 1.4; }
+.menu-sub { font-size: var(--fs-xs); color: var(--ink-3); margin-top: 1px; }
+.menu-desc { font-size: var(--fs-s); color: var(--ink-2); line-height: 1.5; margin-top: 6px;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.price { margin-top: auto; padding-top: var(--s2); font-size: var(--fs-m); font-weight: 800; }
+.menu-list { background: var(--surface); border-radius: var(--r-m); box-shadow: var(--e1); }
+.menu-row { display: flex; gap: var(--s3); align-items: baseline; padding: var(--s3) var(--s4); }
+.menu-row + .menu-row { border-top: 1px solid var(--line); }
+.menu-row .menu-text { flex: 1; min-width: 0; }
+.menu-row .menu-desc { -webkit-line-clamp: unset; }
+.menu-row .price { margin: 0; padding: 0; white-space: nowrap; }
+.menu-grid + .menu-list { margin-top: var(--s3); }
+
+.actions { display: grid; grid-template-columns: auto 1fr 1fr; gap: var(--s2);
+  padding: var(--s3) var(--s4) calc(var(--s3) + env(safe-area-inset-bottom)); background: var(--bg); box-shadow: 0 -1px 0 var(--line); }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 48px; padding: 0 var(--s4);
+  border-radius: var(--r-m); font-size: var(--fs-m); font-weight: 700; text-decoration: none; white-space: nowrap;
+  transition: transform 120ms var(--ease), background var(--t), color var(--t); }
+.btn:active { transform: scale(.97); }
+.btn .ic { width: 18px; height: 18px; }
+.btn-outline { background: var(--surface); box-shadow: inset 0 0 0 1px var(--line); color: var(--ink); }
+.btn-outline .ic { width: 14px; height: 14px; color: var(--ink-3); }
+.btn-naver { background: var(--naver); color: #fff; }
+.btn-dark { background: var(--ink); color: #fff; width: 100%; }
+.btn-dark:disabled { opacity: .3; }
+.btn-fav { background: var(--surface); box-shadow: inset 0 0 0 1px var(--line); color: var(--heart); padding: 0 var(--s3); }
+.btn-fav.on { background: var(--heart-soft); box-shadow: inset 0 0 0 1px var(--heart); }
+.btn-fav.on .ic { fill: currentColor; }
+
+.favs-wrap { padding: 0 var(--s4) var(--s6); }
+.favs-lead { margin: 0; font-size: var(--fs-m); color: var(--ink-2); }
+.fav-group h3 { display: flex; align-items: center; gap: var(--s2); margin: var(--s5) 0 var(--s2); font-size: var(--fs-base); font-weight: 800; }
+.fav-group h3 .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--c); }
+.preview-label { margin: var(--s6) 0 var(--s2); font-size: var(--fs-s); font-weight: 700; color: var(--ink-3); }
+.preview { display: block; width: 100%; resize: none; border: 0; border-radius: var(--r-m); padding: var(--s3) var(--s4);
+  background: var(--surface-2); color: var(--ink-2); font: var(--fs-s)/1.7 var(--font); }
+.foot { padding: var(--s3) var(--s4) calc(var(--s3) + env(safe-area-inset-bottom)); box-shadow: 0 -1px 0 var(--line); background: var(--bg); }
+
+.lightbox { position: fixed; inset: 0; z-index: 2000; background: rgba(20,18,16,.94); display: flex; align-items: center; justify-content: center; animation: fade .2s; }
+@keyframes fade { from { opacity: 0; } }
+.lightbox img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.lightbox .icon-btn { position: absolute; top: calc(var(--s3) + env(safe-area-inset-top)); right: var(--s3); background: rgba(255,255,255,.14); color: #fff; box-shadow: none; }
+
+.toast { position: fixed; left: 50%; bottom: calc(96px + env(safe-area-inset-bottom)); z-index: 3000;
+  transform: translate(-50%, 12px); opacity: 0; pointer-events: none; width: max-content; max-width: calc(100% - 32px);
+  padding: var(--s3) var(--s4); border-radius: var(--r-m); background: var(--ink); color: #fff; box-shadow: var(--e2);
+  font-size: var(--fs-m); line-height: 1.5; text-align: center; white-space: pre-line; transition: opacity var(--t), transform var(--t) var(--ease); }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+.load-error { position: absolute; inset: 0; z-index: 950; display: flex; align-items: center; justify-content: center;
+  padding: var(--s6); background: var(--bg); text-align: center; font-size: var(--fs-m); line-height: 1.7; color: var(--ink-2); }
+.load-error code { background: var(--surface-2); padding: 2px 6px; border-radius: 6px; }
+
+@media (min-width: 720px) {
+  .sheet { left: var(--s4); right: auto; bottom: var(--s4); width: 400px; max-height: calc(100% - 32px); border-radius: var(--r-l); }
+  .modal { left: 50%; width: 480px; transform: translateX(-50%); box-shadow: var(--e2); }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 1ms !important; transition-duration: 1ms !important; }
+}
 </style>
 </head>
 <body>
 <div id="app">
-  <header>
-    <h1 data-i18n="title"></h1>
-    <button class="fav-badge" id="favBadge" type="button" aria-label="favorites">♥ <span id="favCount">0</span></button>
-    <div class="lang" role="group" aria-label="language">
+  <header class="topbar">
+    <div class="brand">
+      <h1 data-i18n="title"></h1>
+      <p data-i18n="sub"></p>
+    </div>
+    <button class="icon-btn fav-btn" id="favBadge" type="button" aria-label="favorites"><span data-icon="heart"></span><span id="favCount">0</span></button>
+    <div class="seg" role="group" aria-label="language">
       <button type="button" data-lang="ja">日本語</button>
       <button type="button" data-lang="ko">한국어</button>
     </div>
   </header>
 
-  <div class="notice" id="notice">
-    <span>🧭</span>
+  <div class="tip" id="notice">
+    <span data-icon="nav"></span>
     <p data-i18n="notice"></p>
-    <button type="button" id="noticeClose" aria-label="close">✕</button>
+    <button type="button" id="noticeClose" aria-label="close"><span data-icon="close"></span></button>
   </div>
 
   <nav class="chips" id="areaChips"></nav>
@@ -279,29 +332,29 @@
       <div id="areaLabels"></div>
       <div id="pins"></div>
     </div>
-    <div class="hint" id="hint" data-i18n="hint"></div>
+    <div class="hint" id="hint"><span data-icon="tap"></span><span data-i18n="hint"></span></div>
 
     <section class="sheet" id="sheet" aria-hidden="true">
       <button class="sheet-handle" id="sheetHandle" type="button" aria-label="toggle"></button>
       <div class="sheet-head">
-        <button class="back-btn" type="button" id="backBtn" data-i18n="back"></button>
-        <div class="sheet-title">
+        <button class="back-btn" type="button" id="backBtn"><span data-icon="back"></span><span data-i18n="back"></span></button>
+        <div class="sheet-title" id="sheetTitle">
+          <span class="dot"></span>
           <h2 id="sheetName"></h2>
           <span class="sub" id="sheetSub"></span>
-          <span class="count" id="sheetCount"></span>
         </div>
         <p class="sheet-desc" id="sheetDesc"></p>
       </div>
-      <div class="filters" id="filters"></div>
+      <div class="chips" id="filters"></div>
       <div class="sheet-list" id="sheetList"></div>
     </section>
   </div>
 </div>
 
 <!-- 장소 상세 -->
-<div class="modal" id="detail" hidden>
+<div class="modal" id="detail" role="dialog" aria-modal="true" hidden>
   <div class="modal-bar">
-    <button class="icon-btn" type="button" data-close aria-label="back">←</button>
+    <button class="icon-btn" type="button" data-close aria-label="back"><span data-icon="back"></span></button>
     <div class="title" id="detailTitle"></div>
   </div>
   <div class="modal-body" id="detailBody"></div>
@@ -309,25 +362,24 @@
 </div>
 
 <!-- 찜 목록 -->
-<div class="modal" id="favs" hidden>
+<div class="modal" id="favs" role="dialog" aria-modal="true" hidden>
   <div class="modal-bar">
-    <button class="icon-btn" type="button" data-close aria-label="back">←</button>
+    <button class="icon-btn" type="button" data-close aria-label="back"><span data-icon="back"></span></button>
     <div class="title" data-i18n="fav_title"></div>
   </div>
-  <div class="modal-body"><div class="fav-wrap" id="favList"></div></div>
-  <div class="fav-foot">
-    <button class="copy-btn" type="button" id="copyBtn" data-i18n="copy"></button>
-    <textarea class="copy-fallback" id="copyFallback" readonly hidden></textarea>
+  <div class="modal-body"><div class="favs-wrap" id="favList"></div></div>
+  <div class="foot">
+    <button class="btn btn-dark" type="button" id="copyBtn"><span data-icon="copy"></span><span data-i18n="copy"></span></button>
   </div>
 </div>
 
 <!-- 사진 크게 보기 -->
 <div class="lightbox" id="lightbox" hidden>
   <img id="lightboxImg" alt="">
-  <button class="icon-btn" type="button" data-close aria-label="close">✕</button>
+  <button class="icon-btn" type="button" data-close aria-label="close"><span data-icon="close"></span></button>
 </div>
 
-<div class="toast" id="toast" role="status"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
 (function () {
@@ -339,24 +391,26 @@
   const STR = {
     ja: {
       title: '大邱おでかけマップ',
+      sub: '11月16日・大邱さんぽ',
       notice: '韓国ではGoogleマップの経路案内がうまく使えないので、NAVER Map（ネイバー地図）アプリがおすすめです。',
-      hint: 'エリアをタップすると、お店やスポットが見られます',
+      hint: 'ピンをタップして、エリアのお店を見てみよう',
       all: '全体マップ',
-      back: '← 全体マップ',
+      back: '全体マップ',
       cat_all: 'すべて', cat_restaurant: 'ごはん', cat_cafe: 'カフェ', cat_activity: '遊ぶ・体験',
-      count: n => `${n}件`,
-      hours: '営業時間',
       menu: 'メニュー',
-      signature: '看板メニュー',
-      fav_off: '♡ 行きたい',
-      fav_on: '♥ 行きたい！',
+      menu_note: '価格は変わることがあります',
+      signature: '看板',
+      fav_off: '行きたい',
+      fav_on: '行きたい！',
       naver: 'NAVER Map',
       google: 'Google Maps',
       fav_title: '行きたい場所リスト',
+      fav_lead: '行きたい場所がそろったら、コピーして送ってね。',
       fav_empty: 'まだありません。\n気になる場所の ♡ をタップしてね',
+      preview: '送る内容',
       copy: 'リストをコピー',
       copied: 'コピーしました！\nLINEかカカオトークで送ってね',
-      copy_fail: 'うまくコピーできませんでした。\n下の文字を長押しでコピーしてね',
+      copy_fail: 'うまくコピーできませんでした。\n「送る内容」を長押ししてコピーしてね',
       empty_cat: 'このカテゴリの場所はまだありません',
       other: 'その他',
       price: v => `${v}ウォン`,
@@ -364,24 +418,26 @@
     },
     ko: {
       title: '대구 둘러보기 지도',
+      sub: '11월 16일 · 대구 나들이',
       notice: '한국에서는 구글맵 길찾기가 잘 안 되니 네이버지도 앱을 추천합니다.',
-      hint: '구역을 누르면 가게와 장소를 볼 수 있어요',
+      hint: '핀을 눌러 구역별 가게를 둘러보세요',
       all: '전체 지도',
-      back: '← 전체 지도',
+      back: '전체 지도',
       cat_all: '전체', cat_restaurant: '식당', cat_cafe: '카페', cat_activity: '액티비티',
-      count: n => `${n}곳`,
-      hours: '영업시간',
       menu: '메뉴',
+      menu_note: '가격은 바뀔 수 있어요',
       signature: '대표',
-      fav_off: '♡ 가고 싶어요',
-      fav_on: '♥ 가고 싶어요!',
+      fav_off: '가고 싶어요',
+      fav_on: '가고 싶어요!',
       naver: '네이버지도',
       google: 'Google Maps',
       fav_title: '찜 목록',
+      fav_lead: '가고 싶은 곳을 다 골랐으면 복사해서 보내 주세요.',
       fav_empty: '아직 없어요.\n가고 싶은 곳의 ♡ 를 눌러 주세요',
+      preview: '보낼 내용',
       copy: '찜 목록 복사',
       copied: '복사했어요!\nLINE이나 카톡으로 보내주세요',
-      copy_fail: '복사가 안 됐어요.\n아래 글자를 길게 눌러 복사해 주세요',
+      copy_fail: '복사가 안 됐어요.\n"보낼 내용"을 길게 눌러 복사해 주세요',
       empty_cat: '이 카테고리엔 아직 장소가 없어요',
       other: '기타',
       price: v => `${v}원`,
@@ -389,14 +445,30 @@
     },
   };
 
-  /* 카테고리: 핀 색상·아이콘 */
-  const CATS = {
-    restaurant: { color: '#e4572e', icon: '🍽️' },
-    cafe:       { color: '#9c6644', icon: '☕' },
-    activity:   { color: '#3a7bd5', icon: '🎡' },
+  /* =========================================================
+   * 아이콘 (24px 격자, 선 굵기 통일)
+   * ========================================================= */
+  const ICON = {
+    heart: '<path d="M12 20.3s-7.5-4.6-7.5-10.3A4.3 4.3 0 0 1 12 7.4a4.3 4.3 0 0 1 7.5 2.6c0 5.7-7.5 10.3-7.5 10.3z"/>',
+    back: '<path d="M15 5l-7 7 7 7"/>',
+    close: '<path d="M6 6l12 12M18 6L6 18"/>',
+    food: '<path d="M7 3v7m-2.5-7v4.5a2.5 2.5 0 0 0 5 0V3M7 10v11M17.5 21V3c-2.2 1.2-3.5 3.6-3.5 7v3h3.5"/>',
+    cafe: '<path d="M4 9h12v4.5A5.5 5.5 0 0 1 10.5 19h-1A5.5 5.5 0 0 1 4 13.5V9zM16 10.5h1.5a2.5 2.5 0 0 1 0 5H16M8 3.5c-.7.8-.7 1.7 0 2.5M12 3.5c-.7.8-.7 1.7 0 2.5"/>',
+    play: '<path d="M12 3.5l2.4 5.1 5.6.7-4.1 3.9 1 5.5L12 16.1l-4.9 2.6 1-5.5-4.1-3.9 5.6-.7z"/>',
+    grid: '<path d="M4.5 4.5h6v6h-6zM13.5 4.5h6v6h-6zM4.5 13.5h6v6h-6zM13.5 13.5h6v6h-6z"/>',
+    map: '<path d="M9 4.5L4 6.5v13l5-2 6 2 5-2v-13l-5 2-6-2zM9 4.5v13M15 6.5v13"/>',
+    pin: '<path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/>',
+    clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
+    copy: '<rect x="8.5" y="8.5" width="11" height="11" rx="2.5"/><path d="M15.5 8.5V6.5a2 2 0 0 0-2-2h-7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h2"/>',
+    nav: '<path d="M20 4L4 10.5l7 2.5 2.5 7z"/>',
+    tap: '<path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V10m0-.5a1.5 1.5 0 0 1 3 0V11m0-.5a1.5 1.5 0 0 1 3 0V15a6 6 0 0 1-6 6h-.6a5 5 0 0 1-3.9-1.9L4.6 16a1.6 1.6 0 0 1 2.4-2.1L9 15.5"/>',
+    out: '<path d="M14 4.5h5.5V10M19.5 4.5L11 13M17 14v4a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 5 18V9a1.5 1.5 0 0 1 1.5-1.5h4"/>',
   };
+  const ic = (name, cls) => `<svg class="ic ${cls || ''}" viewBox="0 0 24 24" aria-hidden="true">${ICON[name] || ''}</svg>`;
+
+  const CATS = { restaurant: 'food', cafe: 'cafe', activity: 'play' };
   const CAT_KEYS = ['all', 'restaurant', 'cafe', 'activity'];
-  const FALLBACK_AREA_COLORS = ['#e4572e', '#3a7bd5', '#2a9d8f', '#8e5bd6', '#e9a23b', '#d6457a'];
+  const AREA_COLORS = ['#E07A2E', '#3E63B8', '#2E8C7E', '#C9971E', '#8A55A6', '#5F8A3A'];
 
   /* =========================================================
    * localStorage (실패해도 앱은 동작)
@@ -412,16 +484,12 @@
   };
 
   /* =========================================================
-   * 상태
+   * 상태 / 도우미
    * ========================================================= */
   let lang = store.get('daegu-map:lang', 'ja');
   if (!STR[lang]) lang = 'ja';
   const favs = new Set((store.get('daegu-map:favs', []) || []).filter(x => typeof x === 'string'));
-
-  const S = {
-    areas: [], places: [], areaById: {}, placeById: {},
-    currentArea: null, filter: 'all', detailId: null,
-  };
+  const S = { areas: [], places: [], areaById: {}, placeById: {}, currentArea: null, filter: 'all', detailId: null };
 
   const $ = sel => document.querySelector(sel);
   const t = key => STR[lang][key];
@@ -437,11 +505,10 @@
   }
   /** 일반 텍스트 필드: 현재 언어 → 없으면 다른 언어 */
   function txt(o, field) {
-    return (o[`${field}_${lang}`] || o[`${field}_${lang === 'ja' ? 'ko' : 'ja'}`] || '').trim();
+    return String(o[`${field}_${lang}`] || o[`${field}_${lang === 'ja' ? 'ko' : 'ja'}`] || '').trim();
   }
-  function catOf(p) { return CATS[p.category] || CATS.activity; }
-  function catLabel(key) { return t('cat_' + key) || key; }
-
+  const catKey = p => (CATS[p.category] ? p.category : 'activity');
+  const catLabel = key => t('cat_' + key) || key;
   function toNum(v) {
     if (v === null || v === undefined || v === '') return NaN;
     return typeof v === 'number' ? v : Number(v);
@@ -450,30 +517,25 @@
     const a = toNum(lat), b = toNum(lng);
     return Number.isFinite(a) && Number.isFinite(b) && Math.abs(a) <= 90 && Math.abs(b) <= 180;
   }
-
   function formatPrice(v) {
     if (v === null || v === undefined || v === '') return '';
     const n = toNum(v);
-    if (Number.isFinite(n)) return t('price')(n.toLocaleString('ja-JP'));
-    return String(v);
+    return Number.isFinite(n) ? t('price')(n.toLocaleString('ja-JP')) : String(v);
   }
-
-  function placeholder(cat, extraClass) {
-    return `<div class="ph ${extraClass || ''}" style="--c:${cat.color}">${cat.icon}</div>`;
-  }
-  function imgTag(src, cat, alt) {
-    return `<img src="${esc(src)}" alt="${esc(alt || '')}" loading="lazy" decoding="async" data-cat-color="${cat.color}" data-cat-icon="${cat.icon}">`;
+  const placeholder = cat => `<div class="ph">${ic(CATS[cat] || 'play')}</div>`;
+  const imgTag = (src, cat, alt) =>
+    `<img src="${esc(src)}" alt="${esc(alt || '')}" loading="lazy" decoding="async" data-ph="${esc(cat)}">`;
+  function fillIcons(root) {
+    (root || document).querySelectorAll('[data-icon]').forEach(el => { el.outerHTML = ic(el.dataset.icon); });
   }
 
   /* 이미지가 깨지면 카테고리 아이콘으로 교체 */
   document.addEventListener('error', e => {
     const img = e.target;
-    if (img && img.tagName === 'IMG' && img.dataset.catIcon) {
-      const div = document.createElement('div');
-      div.className = 'ph';
-      div.style.setProperty('--c', img.dataset.catColor);
-      div.textContent = img.dataset.catIcon;
-      img.replaceWith(div);
+    if (img && img.tagName === 'IMG' && img.dataset.ph) {
+      const tmp = document.createElement('div');
+      tmp.innerHTML = placeholder(img.dataset.ph);
+      img.replaceWith(tmp.firstChild);
     }
   }, true);
 
@@ -487,12 +549,9 @@
   }
   function closeTop() {
     if (!layers.length) return;
-    try { history.back(); } catch (e) { const l = layers.pop(); l && l.close(); }
+    try { history.back(); } catch (e) { const l = layers.pop(); if (l) l.close(); }
   }
-  window.addEventListener('popstate', () => {
-    const l = layers.pop();
-    if (l) l.close();
-  });
+  window.addEventListener('popstate', () => { const l = layers.pop(); if (l) l.close(); });
 
   /* =========================================================
    * 지도 (대구만 오려낸 일러스트 — 구역마다 핀 하나, 누르면 그 구역으로 부드럽게 확대)
@@ -532,18 +591,18 @@
       svgEl('path', { d: d.d }, shadowG);
       svgEl('path', { d: d.d }, land);
       svgEl('path', { d: d.d }, lines);
-      const t = svgEl('text', { x: d.label[0], y: d.label[1], 'text-anchor': 'middle', 'dominant-baseline': 'central' }, dl);
-      districtTexts.push([t, d]);
+      const tx = svgEl('text', { x: d.label[0], y: d.label[1], 'text-anchor': 'middle', 'dominant-baseline': 'central' }, dl);
+      districtTexts.push([tx, d]);
     });
     renderDistrictNames();
   }
   function renderDistrictNames() {
-    districtTexts.forEach(([t, d]) => { t.textContent = lang === 'ja' ? d.name_ja : d.name_ko; });
+    districtTexts.forEach(([tx, d]) => { tx.textContent = lang === 'ja' ? d.name_ja : d.name_ko; });
   }
 
   function areaLabelHTML(a) {
     const n = names(a);
-    return `<b>${esc(n.main)}</b>${n.sub ? `<small>${esc(n.sub)}</small>` : ''}`;
+    return `<span class="dot"></span><b>${esc(n.main)}</b>${n.sub ? `<small>${esc(n.sub)}</small>` : ''}`;
   }
   const PIN_SVG = `<svg viewBox="0 0 ${PIN_W} ${PIN_H}" width="${PIN_W}" height="${PIN_H}" aria-hidden="true">
     <path d="M16 38C9 30 2 23 2 14.5a14 14 0 0 1 28 0C30 23 23 30 16 38Z" fill="var(--c)" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/>
@@ -562,7 +621,7 @@
       pin.addEventListener('click', () => selectArea(a.id));
       pinsEl.appendChild(pin);
 
-      const leader = svgEl('line', { class: 'leader', stroke: a.color }, leadersSvg);
+      const leader = svgEl('line', { class: 'leader' }, leadersSvg);
       const label = document.createElement('button');
       label.type = 'button';
       label.className = 'area-label';
@@ -588,7 +647,7 @@
       const n = S.places.filter(p => p.area_id === id && favs.has(p.id)).length;
       const dot = a.pin.querySelector('.fav-dot');
       dot.hidden = !n;
-      dot.textContent = `♥${n}`;
+      dot.innerHTML = `${ic('heart')}${n}`;
     });
   }
 
@@ -602,20 +661,20 @@
     ids.forEach((id, i) => {
       const a = areaEls[id], [px, py] = tips[i];
       const hx = px, hy = py - 24;               // 핀 머리 중심
-      const w = a.label.offsetWidth + 6, h = a.label.offsetHeight + 4;
+      const w = a.label.offsetWidth + 8, h = a.label.offsetHeight + 6;
       let chosen = null;
       search:
-      for (const dist of [34, 56, 82, 110]) {
+      for (const dist of [36, 58, 84, 112]) {
         for (const [ux, uy] of [[0, -1], [1, 0], [-1, 0], [0, 1], [.8, -.8], [-.8, -.8], [.8, .8], [-.8, .8]]) {
           const dx = ux * (dist + Math.abs(ux) * w / 2), dy = uy * (dist + Math.abs(uy) * h / 2);
           const r = { l: hx + dx - w / 2, r: hx + dx + w / 2, t: hy + dy - h / 2, b: hy + dy + h / 2 };
-          if (r.l < 4 || r.r > W - 4 || r.t < 4 || r.b > H - 4) continue;
+          if (r.l < 6 || r.r > W - 6 || r.t < 6 || r.b > H - 70) continue;   // 아래 안내 문구 자리 비우기
           if (placed.some(q => hit(r, q)) || pinRects.some(q => hit(r, q))) continue;
           chosen = { dx, dy, r };
           break search;
         }
       }
-      if (!chosen) chosen = { dx: 0, dy: -34 - h / 2, r: { l: hx - w / 2, r: hx + w / 2, t: hy - 34 - h, b: hy - 34 } };
+      if (!chosen) chosen = { dx: 0, dy: -36 - h / 2, r: { l: hx - w / 2, r: hx + w / 2, t: hy - 36 - h, b: hy - 36 } };
       a.off = { dx: chosen.dx, dy: chosen.dy - 24 };   // 핀 끝(px,py) 기준
       placed.push(chosen.r);
     });
@@ -627,18 +686,13 @@
     applyView();
   }
 
-  function visiblePlaces() {
-    if (!S.currentArea) return [];
-    return S.places.filter(p => p.area_id === S.currentArea && (S.filter === 'all' || p.category === S.filter));
-  }
-
   /* 지금 시점(V)을 화면에 반영 — 확대 애니메이션 중엔 매 프레임 호출됨 */
   function applyView() {
     if (!SHAPE || !W) return;
     mapSvg.setAttribute('viewBox', `${V.x} ${V.y} ${V.w} ${V.h}`);
     const s = V.w / W;                          // 화면 1px 당 SVG 단위
-    shadowG.setAttribute('transform', `translate(0 ${(6 * s).toFixed(3)})`);
-    districtTexts.forEach(([t]) => t.setAttribute('font-size', (13 * s).toFixed(3)));
+    shadowG.setAttribute('transform', `translate(0 ${(5 * s).toFixed(3)})`);
+    districtTexts.forEach(([tx]) => tx.setAttribute('font-size', (11.5 * s).toFixed(3)));
     Object.values(areaEls).forEach(a => {
       const [px, py] = toPx(a.ax, a.ay);
       a.pin.style.transform = `translate(${(px - PIN_W / 2).toFixed(1)}px, ${(py - PIN_TIP_Y).toFixed(1)}px)`;
@@ -648,14 +702,14 @@
     });
   }
 
-  /* 화면에 맞는 시점 계산: bounds=[x0,y0,x1,y1], bottom/left=시트가 가리는 부분(px) */
+  /* 화면에 맞는 시점 계산: bounds=[x0,y0,x1,y1], bottom/left/top = 가려지거나 비워둘 부분(px) */
   function viewFor(bounds, o) {
-    const pad = o.pad == null ? 16 : o.pad, bottom = o.bottom || 0, left = o.left || 0;
+    const pad = o.pad == null ? 16 : o.pad, bottom = o.bottom || 0, left = o.left || 0, top = o.top || 0;
     const [x0, y0, x1, y1] = bounds;
-    const availW = Math.max(80, W - left - 2 * pad), availH = Math.max(80, H - bottom - 2 * pad);
+    const availW = Math.max(80, W - left - 2 * pad), availH = Math.max(80, H - bottom - top - 2 * pad);
     const sc = Math.max((x1 - x0) / availW, (y1 - y0) / availH);
     const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
-    return { x: cx - (left + (W - left) / 2) * sc, y: cy - ((H - bottom) / 2) * sc, w: W * sc, h: H * sc };
+    return { x: cx - (left + (W - left) / 2) * sc, y: cy - (top + (H - bottom - top) / 2) * sc, w: W * sc, h: H * sc };
   }
 
   function goTo(v, animate) {
@@ -685,7 +739,7 @@
     });
     return [x0, y0, x1, y1];
   }
-  const overviewView = () => viewFor(overviewBounds(), { pad: 14 });
+  const overviewView = () => viewFor(overviewBounds(), { pad: 18, bottom: 56 });   // 아래 안내 문구만큼 위로
 
   function fitOverview(animate) {
     const v = overviewView();
@@ -696,10 +750,10 @@
   function fitArea(animate = true) {
     const a = areaEls[S.currentArea];
     const sheet = $('#sheet'), wide = window.innerWidth >= 720;
-    const bottom = wide ? 0 : sheet.offsetHeight, left = wide ? sheet.offsetWidth + 24 : 0;
+    const bottom = wide ? 0 : sheet.offsetHeight, left = wide ? sheet.offsetWidth + 32 : 0;
     if (!a) { goTo(viewFor(overviewBounds(), { pad: 14, bottom, left }), animate); return; }
     const R = a.zoomUnits;
-    goTo(viewFor([a.ax - R, a.ay - R, a.ax + R, a.ay + R], { pad: 0, bottom, left }), animate);
+    goTo(viewFor([a.ax - R, a.ay - R, a.ax + R, a.ay + R], { pad: 0, bottom, left, top: 24 }), animate);
   }
 
   function onResize() {
@@ -713,9 +767,9 @@
    * ========================================================= */
   function renderAreaChips() {
     const wrap = $('#areaChips');
-    const chips = [`<button class="chip ${S.currentArea ? '' : 'on'}" type="button" data-area="">🗺️ ${esc(t('all'))}</button>`];
+    const chips = [`<button class="chip ${S.currentArea ? '' : 'on'}" type="button" data-area="">${ic('map', 'ic-s')}${esc(t('all'))}</button>`];
     S.areas.forEach(a => {
-      chips.push(`<button class="chip ${S.currentArea === a.id ? 'on' : ''}" type="button" data-area="${esc(a.id)}" style="--c:${a.color}">
+      chips.push(`<button class="chip ${S.currentArea === a.id ? 'on' : ''}" type="button" data-area="${esc(a.id)}" style="--c:${esc(a.color)}">
         <span class="dot"></span>${esc(names(a).main)}</button>`);
     });
     wrap.innerHTML = chips.join('');
@@ -730,38 +784,44 @@
   });
 
   function cardHTML(p, opts) {
-    const c = catOf(p), n = names(p);
+    const n = names(p), ck = catKey(p);
     const photo = (p.photos || []).find(Boolean);
-    const area = S.areaById[p.area_id];
-    const tags = [`<span class="tag cat" style="--c:${c.color}">${c.icon} ${esc(catLabel(p.category))}</span>`];
-    if (opts && opts.showArea && area) tags.push(`<span class="tag">${esc(names(area).main)}</span>`);
+    const showDesc = !(opts && opts.noDesc) && txt(p, 'desc');
+    const on = favs.has(p.id);
     return `<div class="card" role="button" tabindex="0" data-place="${esc(p.id)}">
-      <div class="thumb">${photo ? imgTag(photo, c, n.main) : placeholder(c)}</div>
+      <div class="thumb">${photo ? imgTag(photo, ck, n.main) : placeholder(ck)}</div>
       <div class="card-body">
         <div class="card-name">${esc(n.main)}</div>
-        ${n.sub ? `<div class="card-ko">${esc(n.sub)}</div>` : ''}
-        ${opts && opts.noDesc ? '' : `<div class="card-desc">${esc(txt(p, 'desc'))}</div>`}
-        <div class="tags">${tags.join('')}</div>
+        ${n.sub ? `<div class="card-sub">${esc(n.sub)}</div>` : ''}
+        ${showDesc ? `<div class="card-desc">${esc(txt(p, 'desc'))}</div>` : ''}
+        <div class="meta">${ic(CATS[ck])}<span>${esc(catLabel(ck))}</span></div>
       </div>
-      <button class="heart-btn ${favs.has(p.id) ? 'on' : ''}" type="button" data-fav="${esc(p.id)}" aria-label="favorite">${favs.has(p.id) ? '♥' : '♡'}</button>
+      <button class="heart-btn ${on ? 'on' : ''}" type="button" data-fav="${esc(p.id)}" aria-pressed="${on}" aria-label="${esc(t('fav_off'))}">${ic('heart')}</button>
     </div>`;
+  }
+
+  function visiblePlaces() {
+    if (!S.currentArea) return [];
+    return S.places.filter(p => p.area_id === S.currentArea && (S.filter === 'all' || catKey(p) === S.filter));
   }
 
   function renderSheet() {
     const a = S.areaById[S.currentArea];
     if (!a) return;
     const n = names(a);
+    $('#sheetTitle').style.setProperty('--c', a.color);
     $('#sheetName').textContent = n.main;
-    $('#sheetName').style.color = a.color;
     $('#sheetSub').textContent = n.sub;
     $('#sheetDesc').textContent = txt(a, 'desc');
-    const inArea = S.places.filter(p => p.area_id === a.id);
-    $('#sheetCount').textContent = t('count')(inArea.length);
+    $('#sheetDesc').hidden = !txt(a, 'desc');
 
+    const inArea = S.places.filter(p => p.area_id === a.id);
+    // 장소가 있는 카테고리만 보여줌 (선택지를 줄여서 고르기 쉽게)
     $('#filters').innerHTML = CAT_KEYS.map(k => {
-      const color = k === 'all' ? '' : `style="--c:${CATS[k].color}"`;
-      const icon = k === 'all' ? '' : CATS[k].icon + ' ';
-      return `<button class="chip ${S.filter === k ? 'on' : ''}" type="button" data-filter="${k}" ${color}>${icon}${esc(catLabel(k))}</button>`;
+      const cnt = k === 'all' ? inArea.length : inArea.filter(p => catKey(p) === k).length;
+      if (k !== 'all' && !cnt) return '';
+      return `<button class="chip ${S.filter === k ? 'on' : ''}" type="button" data-filter="${k}">
+        ${ic(k === 'all' ? 'grid' : CATS[k], 'ic-s')}${esc(catLabel(k))}<span class="n">${cnt}</span></button>`;
     }).join('');
 
     const list = visiblePlaces();
@@ -795,11 +855,11 @@
 
   function selectArea(id) {
     if (!S.areaById[id]) return;
+    const sheet = $('#sheet');
+    if (S.currentArea === id) { sheet.classList.remove('collapsed'); return; }
     const fromOverview = !S.currentArea;
-    if (S.currentArea === id) { $('#sheet').classList.remove('collapsed'); return; }
     S.currentArea = id;
     S.filter = 'all';
-    const sheet = $('#sheet');
     sheet.classList.remove('collapsed');
     sheet.classList.add('open');
     sheet.setAttribute('aria-hidden', 'false');
@@ -808,7 +868,7 @@
     renderAreaChips();
     renderSheet();
     styleAreas();
-    requestAnimationFrame(fitArea);
+    requestAnimationFrame(() => fitArea(true));
     if (fromOverview) pushLayer('area', showOverview);
   }
 
@@ -832,7 +892,7 @@
     let y0 = null;
     handle.addEventListener('click', () => sheet.classList.toggle('collapsed'));
     sheet.addEventListener('touchstart', e => {
-      if (e.target.closest('.sheet-list')) return;
+      if (e.target.closest('.sheet-list') || e.target.closest('.chips')) return;
       y0 = e.touches[0].clientY;
     }, { passive: true });
     sheet.addEventListener('touchend', e => {
@@ -847,79 +907,104 @@
   /* =========================================================
    * 장소 상세
    * ========================================================= */
+  function menuHTML(menu, ck) {
+    // section_ja / section_ko 가 같은 항목끼리 묶기 (json 순서 유지)
+    const groups = [];
+    menu.forEach(m => {
+      const sec = txt(m, 'section');
+      if (!groups.length || groups[groups.length - 1].sec !== sec) groups.push({ sec, items: [] });
+      groups[groups.length - 1].items.push(m);
+    });
+    return groups.map(g => {
+      const withPhoto = g.items.filter(m => m.photo), noPhoto = g.items.filter(m => !m.photo);
+      const tiles = withPhoto.map(m => {
+        const mn = names(m);
+        return `<div class="menu-item">
+          <button class="menu-photo" type="button" data-zoom="${esc(m.photo)}" aria-label="${esc(mn.main)}">
+            ${imgTag(m.photo, ck, mn.main)}
+            ${m.signature ? `<span class="badge">${esc(t('signature'))}</span>` : ''}
+          </button>
+          <div class="menu-info">
+            <div class="menu-name">${esc(mn.main)}</div>
+            ${mn.sub ? `<div class="menu-sub">${esc(mn.sub)}</div>` : ''}
+            ${txt(m, 'desc') ? `<div class="menu-desc">${esc(txt(m, 'desc'))}</div>` : ''}
+            ${formatPrice(m.price) ? `<div class="price">${esc(formatPrice(m.price))}</div>` : ''}
+          </div>
+        </div>`;
+      }).join('');
+      const rows = noPhoto.map(m => {
+        const mn = names(m);
+        return `<div class="menu-row">
+          <div class="menu-text">
+            <div class="menu-name">${esc(mn.main)}</div>
+            ${mn.sub ? `<div class="menu-sub">${esc(mn.sub)}</div>` : ''}
+            ${txt(m, 'desc') ? `<div class="menu-desc">${esc(txt(m, 'desc'))}</div>` : ''}
+          </div>
+          ${formatPrice(m.price) ? `<div class="price">${esc(formatPrice(m.price))}</div>` : ''}
+        </div>`;
+      }).join('');
+      return `${g.sec ? `<div class="menu-sec">${esc(g.sec)}</div>` : ''}
+        ${tiles ? `<div class="menu-grid">${tiles}</div>` : ''}
+        ${rows ? `<div class="menu-list">${rows}</div>` : ''}`;
+    }).join('');
+  }
+
   function renderDetail() {
     const p = S.placeById[S.detailId];
     if (!p) return;
-    const c = catOf(p), n = names(p);
+    const n = names(p), ck = catKey(p);
     const area = S.areaById[p.area_id];
     const photos = (p.photos || []).filter(Boolean);
     const menu = (p.menu || []).filter(m => m && (m.name_ko || m.name_ja));
+    const hours = txt(p, 'hours');
 
     $('#detailTitle').textContent = n.main;
 
-    let gallery;
-    if (photos.length) {
-      gallery = `<div class="slide-count"><div class="slider" id="slider">${photos.map((src, i) =>
-        imgTag(src, c, `${n.main} ${i + 1}`)).join('')}</div>
-        ${photos.length > 1 ? `<span id="slideNo">1 / ${photos.length}</span>` : ''}</div>`;
-    } else {
-      gallery = `<div class="big-ph" style="--c:${c.color}">${c.icon}</div>`;
-    }
+    const gallery = `<div class="gallery">
+      <div class="slider" id="slider">${photos.length
+        ? photos.map((src, i) => imgTag(src, ck, `${n.main} ${i + 1}`)).join('')
+        : placeholder(ck)}</div>
+      ${photos.length > 1 ? `<div class="dots" id="dots">${photos.map((_, i) => `<i class="${i ? '' : 'on'}"></i>`).join('')}</div>` : ''}
+    </div>`;
 
-    const tags = [`<span class="tag cat" style="--c:${c.color}">${c.icon} ${esc(catLabel(p.category))}</span>`];
-    if (area) tags.push(`<span class="tag">${esc(names(area).main)}</span>`);
+    const pills = [];
+    if (area) pills.push(`<span class="pill" style="--c:${esc(area.color)}"><span class="dot"></span>${esc(names(area).main)}</span>`);
+    pills.push(`<span class="pill">${ic(CATS[ck])}${esc(catLabel(ck))}</span>`);
 
-    const hours = txt(p, 'hours');
-    const menuHTML = menu.length ? `
-      <div class="section-title">${esc(t('menu'))}</div>
-      <div class="menu-grid">${menu.map(m => {
-        const mn = names(m);
-        return `<div class="menu-item">
-          ${m.photo
-            ? `<button class="menu-photo" type="button" data-zoom="${esc(m.photo)}">${imgTag(m.photo, c, mn.main)}</button>`
-            : `<div class="menu-photo">${placeholder(c)}</div>`}
-          <div class="menu-info">
-            ${m.signature ? `<span class="tag sig">${esc(t('signature'))}</span>` : ''}
-            <div class="menu-name">${esc(mn.main)}</div>
-            ${mn.sub ? `<div class="menu-ko">${esc(mn.sub)}</div>` : ''}
-            ${txt(m, 'desc') ? `<div class="menu-desc">${esc(txt(m, 'desc'))}</div>` : ''}
-            ${formatPrice(m.price) ? `<div class="menu-price">${esc(formatPrice(m.price))}</div>` : ''}
-          </div>
-        </div>`;
-      }).join('')}</div>` : '';
+    const infoRows = [];
+    if (p.address_ko) infoRows.push(`<div class="info-row">${ic('pin')}<div>${esc(p.address_ko)}</div></div>`);
+    if (hours) infoRows.push(`<div class="info-row">${ic('clock')}<div>${esc(hours)}</div></div>`);
 
     $('#detailBody').innerHTML = `${gallery}
-      <div class="detail-main">
+      <div class="detail">
+        <div class="pills">${pills.join('')}</div>
         <h2>${esc(n.main)}</h2>
-        ${n.sub ? `<div class="ko">${esc(n.sub)}</div>` : ''}
-        ${p.address_ko ? `<div class="ko">📍 ${esc(p.address_ko)}</div>` : ''}
-        <div class="tags">${tags.join('')}</div>
-        ${txt(p, 'desc') ? `<p>${esc(txt(p, 'desc'))}</p>` : ''}
-        ${hours ? `<div class="section-title">${esc(t('hours'))}</div><div class="hours">${esc(hours)}</div>` : ''}
-        ${menuHTML}
+        ${n.sub ? `<div class="sub">${esc(n.sub)}</div>` : ''}
+        ${txt(p, 'desc') ? `<p class="lead">${esc(txt(p, 'desc'))}</p>` : ''}
+        ${infoRows.length ? `<div class="info">${infoRows.join('')}</div>` : ''}
+        ${menu.length ? `<div class="section-h"><h3>${esc(t('menu'))}</h3><span>${esc(t('menu_note'))}</span></div>${menuHTML(menu, ck)}` : ''}
       </div>`;
 
-    const slider = $('#slider');
-    if (slider && photos.length > 1) {
+    const slider = $('#slider'), dots = $('#dots');
+    if (slider && dots) {
       slider.addEventListener('scroll', () => {
-        const i = Math.round(slider.scrollLeft / slider.clientWidth) + 1;
-        const no = $('#slideNo');
-        if (no) no.textContent = `${Math.min(i, photos.length)} / ${photos.length}`;
+        const i = Math.round(slider.scrollLeft / slider.clientWidth);
+        dots.querySelectorAll('i').forEach((d, j) => d.classList.toggle('on', j === i));
       }, { passive: true });
     }
 
-    const naverQuery = (p.naver_query || p.name_ko || p.name_ja || '').trim();
+    const query = (p.naver_query || p.name_ko || p.name_ja || '').trim();
     const naverUrl = /^https?:\/\//.test(p.naver_url || '')
       ? p.naver_url
-      : `https://map.naver.com/p/search/${encodeURIComponent(naverQuery)}`;
-    const googleQuery = (p.address_ko || naverQuery).trim();
-    const googleUrl = p.hasCoords
+      : `https://map.naver.com/p/search/${encodeURIComponent(query)}`;
+    const googleUrl = validCoords(p.lat, p.lng)
       ? `https://www.google.com/maps/search/?api=1&query=${toNum(p.lat)},${toNum(p.lng)}`
-      : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(googleQuery)}`;
+      : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((p.address_ko || query).trim())}`;
+    const on = favs.has(p.id);
     $('#detailActions').innerHTML = `
-      <button class="act fav ${favs.has(p.id) ? 'on' : ''}" type="button" data-fav="${esc(p.id)}">${esc(favs.has(p.id) ? t('fav_on') : t('fav_off'))}</button>
-      <a class="act naver" href="${esc(naverUrl)}" target="_blank" rel="noopener">${esc(t('naver'))}</a>
-      <a class="act" href="${googleUrl}" target="_blank" rel="noopener">${esc(t('google'))}</a>`;
+      <button class="btn btn-fav ${on ? 'on' : ''}" type="button" data-fav="${esc(p.id)}" aria-pressed="${on}">${ic('heart')}<span>${esc(on ? t('fav_on') : t('fav_off'))}</span></button>
+      <a class="btn btn-naver" href="${esc(naverUrl)}" target="_blank" rel="noopener">${esc(t('naver'))}</a>
+      <a class="btn btn-outline" href="${esc(googleUrl)}" target="_blank" rel="noopener">${esc(t('google'))}${ic('out')}</a>`;
   }
 
   function openDetail(id) {
@@ -948,15 +1033,10 @@
   }
   $('#lightbox').addEventListener('click', () => closeTop());
 
-  document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', e => {
-    e.stopPropagation();
-    closeTop();
-  }));
-
   /* =========================================================
    * 찜하기
    * ========================================================= */
-  function favPlaces() { return S.places.filter(p => favs.has(p.id)); }
+  const favPlaces = () => S.places.filter(p => favs.has(p.id));
 
   function toggleFav(id) {
     if (!S.placeById[id]) return;
@@ -976,7 +1056,8 @@
       if (btn) {
         const on = favs.has(S.detailId);
         btn.classList.toggle('on', on);
-        btn.textContent = on ? t('fav_on') : t('fav_off');
+        btn.setAttribute('aria-pressed', on);
+        btn.querySelector('span').textContent = on ? t('fav_on') : t('fav_off');
       }
     }
     if (!$('#favs').hidden) renderFavs();
@@ -985,36 +1066,11 @@
   /** 찜한 장소를 구역별로 묶기 (areas.json 순서, 모르는 구역은 맨 뒤) */
   function groupedFavs() {
     const list = favPlaces();
-    const groups = S.areas.map(a => ({ area: a, items: list.filter(p => p.area_id === a.id) }))
-      .filter(g => g.items.length);
+    const groups = S.areas.map(a => ({ area: a, items: list.filter(p => p.area_id === a.id) })).filter(g => g.items.length);
     const orphans = list.filter(p => !S.areaById[p.area_id]);
     if (orphans.length) groups.push({ area: null, items: orphans });
     return groups;
   }
-
-  function renderFavs() {
-    const groups = groupedFavs();
-    $('#copyBtn').disabled = !groups.length;
-    $('#copyFallback').hidden = true;
-    if (!groups.length) {
-      $('#favList').innerHTML = `<div class="empty">${esc(t('fav_empty'))}</div>`;
-      return;
-    }
-    $('#favList').innerHTML = groups.map(g => `
-      <div class="fav-group">
-        <h3><span class="dot" style="--c:${g.area ? g.area.color : '#999'}"></span>${esc(g.area ? names(g.area).main : t('other'))}</h3>
-        ${g.items.map(p => cardHTML(p, { noDesc: true })).join('')}
-      </div>`).join('');
-  }
-  bindCardList($('#favList'));
-
-  function openFavs() {
-    renderFavs();
-    const m = $('#favs');
-    m.hidden = false;
-    pushLayer('favs', () => { m.hidden = true; });
-  }
-  $('#favBadge').addEventListener('click', openFavs);
 
   function favText() {
     const lines = ['【行きたい場所 / 가고 싶은 곳】'];
@@ -1029,12 +1085,35 @@
     return lines.join('\n');
   }
 
+  function renderFavs() {
+    const groups = groupedFavs();
+    $('#copyBtn').disabled = !groups.length;
+    if (!groups.length) {
+      $('#favList').innerHTML = `<div class="empty">${esc(t('fav_empty'))}</div>`;
+      return;
+    }
+    const text = favText();
+    $('#favList').innerHTML = `<p class="favs-lead">${esc(t('fav_lead'))}</p>` + groups.map(g => `
+      <div class="fav-group">
+        <h3 style="--c:${esc(g.area ? g.area.color : '#948B80')}"><span class="dot"></span>${esc(g.area ? names(g.area).main : t('other'))}</h3>
+        ${g.items.map(p => cardHTML(p, { noDesc: true })).join('')}
+      </div>`).join('') + `
+      <div class="preview-label">${esc(t('preview'))}</div>
+      <textarea class="preview" id="preview" readonly rows="${text.split('\n').length}">${esc(text)}</textarea>`;
+  }
+  bindCardList($('#favList'));
+
+  function openFavs() {
+    renderFavs();
+    const m = $('#favs');
+    m.hidden = false;
+    pushLayer('favs', () => { m.hidden = true; });
+  }
+  $('#favBadge').addEventListener('click', openFavs);
+
   async function copyText(text) {
     try {
-      if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText(text);
-        return true;
-      }
+      if (navigator.clipboard && window.isSecureContext) { await navigator.clipboard.writeText(text); return true; }
     } catch (e) { /* 아래 방식으로 재시도 */ }
     try {
       const ta = document.createElement('textarea');
@@ -1051,24 +1130,17 @@
   }
 
   $('#copyBtn').addEventListener('click', async () => {
-    const text = favText();
-    const ok = await copyText(text);
-    if (ok) {
-      toast(t('copied'));
-    } else {
-      const fb = $('#copyFallback');
-      fb.value = text;
-      fb.hidden = false;
-      fb.focus(); fb.select();
-      toast(t('copy_fail'));
-    }
+    const ok = await copyText(favText());
+    if (ok) { toast(t('copied')); return; }
+    const pv = $('#preview');
+    if (pv) { pv.focus(); pv.select(); }
+    toast(t('copy_fail'));
   });
 
   let toastTimer;
   function toast(msg) {
     const el = $('#toast');
     el.textContent = msg;
-    el.style.whiteSpace = 'pre-line';
     el.classList.add('show');
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
@@ -1090,19 +1162,11 @@
     store.set('daegu-map:lang', lang);
     applyLang();
     renderAreaChips();
-    renderDistrictNames();
-    renderAreaLabels();
-    styleAreas();
+    if (SHAPE) { renderDistrictNames(); renderAreaLabels(); styleAreas(); }
     if (S.currentArea) renderSheet();
     if (S.detailId) renderDetail();
     if (!$('#favs').hidden) renderFavs();
   }
-  document.querySelectorAll('[data-lang]').forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
-
-  $('#noticeClose').addEventListener('click', () => {
-    $('#notice').hidden = true;
-    requestAnimationFrame(onResize);
-  });
 
   /* =========================================================
    * 데이터 불러오기 + 검증
@@ -1120,7 +1184,7 @@
     areas.forEach((a, i) => {
       if (!a || !a.id) { console.warn(`[areas.json] ${i}번째 구역에 id가 없어 건너뜁니다`, a); return; }
       if (S.areaById[a.id]) { console.warn(`[areas.json] id 중복: ${a.id} (뒤의 것은 건너뜁니다)`); return; }
-      a.color = a.color || FALLBACK_AREA_COLORS[S.areas.length % FALLBACK_AREA_COLORS.length];
+      a.color = a.color || AREA_COLORS[S.areas.length % AREA_COLORS.length];
       a.hasCoords = validCoords(a.lat, a.lng);
       if (!a.hasCoords) console.warn(`[areas.json] 좌표 없음/잘못됨 → 지도에 핀을 찍지 않습니다: ${a.id}`, { lat: a.lat, lng: a.lng });
       S.areas.push(a);
@@ -1131,15 +1195,20 @@
       if (!p || !p.id) { console.warn(`[places.json] ${i}번째 장소에 id가 없어 건너뜁니다`, p); return; }
       if (S.placeById[p.id]) { console.warn(`[places.json] id 중복: ${p.id} (뒤의 것은 건너뜁니다)`); return; }
       if (!CATS[p.category]) console.warn(`[places.json] 알 수 없는 category "${p.category}" (${p.id}) → restaurant / cafe / activity 중 하나로 써 주세요`);
-      if (!S.areaById[p.area_id]) console.warn(`[places.json] area_id "${p.area_id}"가 areas.json에 없습니다 (${p.id}) → 지도·구역 목록에 안 나옵니다`);
-      p.hasCoords = validCoords(p.lat, p.lng);
+      if (!S.areaById[p.area_id]) console.warn(`[places.json] area_id "${p.area_id}"가 areas.json에 없습니다 (${p.id}) → 구역 목록에 안 나옵니다`);
       S.places.push(p);
       S.placeById[p.id] = p;
     });
   }
 
   async function init() {
+    fillIcons();
     applyLang();
+    // 정적 버튼 이벤트 (아이콘을 채운 뒤에 연결)
+    document.querySelectorAll('[data-lang]').forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
+    document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); closeTop(); }));
+    $('#noticeClose').addEventListener('click', () => { $('#notice').hidden = true; requestAnimationFrame(onResize); });
+
     try { history.replaceState(null, ''); } catch (e) {}
     try {
       const [areas, places, shape] = await Promise.all([loadJSON('areas.json'), loadJSON('places.json'), loadJSON('daegu-shape.json')]);
