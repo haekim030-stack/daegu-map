@@ -5,10 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
 <title>大邱おでかけマップ</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <style>
   :root {
     --bg: #ffffff;
@@ -17,7 +13,10 @@
     --line: #e6e8eb;
     --soft: #f5f6f8;
     --accent: #e8436b;
-    --shadow: 0 6px 24px rgba(0,0,0,.14);
+    --shadow-box: 0 6px 24px rgba(0,0,0,.14);
+    /* 일러스트 지도 색 (여기만 바꾸면 분위기가 바뀜) */
+    --sea-a: #dff1fc; --sea-b: #bfe0f4;
+    --land: #f8cdd6; --land-label: #e08ba0; --shadow: #a9cde3;
     --c-restaurant: #e4572e;
     --c-cafe: #9c6644;
     --c-activity: #3a7bd5;
@@ -75,27 +74,42 @@
 
   /* ---------- map ---------- */
   .map-wrap { position: relative; flex: 1; min-height: 0; }
-  #map { position: absolute; inset: 0; background: #e8eef2; }
-  .leaflet-control-attribution { font-size: 10px; }
+  #map {
+    position: absolute; inset: 0; overflow: hidden; isolation: isolate;
+    background: linear-gradient(180deg, var(--sea-a), var(--sea-b));
+    touch-action: manipulation; user-select: none; -webkit-user-select: none;
+  }
+  #mapSvg, #leaders { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  #leaders { pointer-events: none; }
+  #areaLabels, #pins { position: absolute; inset: 0; pointer-events: none; }
+  #pins { z-index: 2; }
+  .shadow path { fill: var(--shadow); stroke: var(--shadow); stroke-width: 6; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+  .land path { fill: var(--land); stroke: var(--land); stroke-width: 3; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+  .lines path { fill: none; stroke: #fff; stroke-width: 1.6; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+  .dlabels text { fill: var(--land-label); font-weight: 700; font-family: var(--font); transition: opacity .3s; pointer-events: none; }
+  #map.zoomed .dlabels text { opacity: 0; }
+  .blobs circle { cursor: pointer; stroke-width: 2.5; vector-effect: non-scaling-stroke; transition: fill-opacity .3s, stroke-opacity .3s; }
+  .leader { stroke-width: 1.5; opacity: .85; transition: opacity .2s; }
+  #map.zoomed .leader { opacity: 0; }
   .hint {
     position: absolute; left: 50%; bottom: calc(16px + env(safe-area-inset-bottom)); transform: translateX(-50%);
     background: rgba(31,35,40,.86); color: #fff; padding: 8px 14px; border-radius: 999px;
     font-size: 13px; white-space: nowrap; z-index: 500; pointer-events: none;
   }
 
-  .area-label { width: 0 !important; height: 0 !important; }
-  .area-label > div {
-    position: absolute; transform: translate(-50%, -50%);
-    background: #fff; border: 2px solid var(--c); border-radius: 12px;
-    padding: 4px 10px; text-align: center; white-space: nowrap; box-shadow: 0 2px 8px rgba(0,0,0,.18);
-    transition: opacity .2s;
+  .area-label {
+    position: absolute; left: 0; top: 0; pointer-events: auto; cursor: pointer;
+    background: #fff; border: 2px solid var(--c); border-radius: 12px; padding: 3px 10px;
+    text-align: center; white-space: nowrap; box-shadow: 0 2px 8px rgba(0,0,0,.16);
+    transition: opacity .2s; will-change: transform; line-height: 1.25;
   }
   .area-label b { display: block; font-size: 13.5px; color: var(--c); }
   .area-label small { display: block; font-size: 11px; color: var(--muted); }
-  .area-label.faded > div { opacity: .35; }
-  .area-label.selected > div { opacity: 0; pointer-events: none; }
+  #map.zoomed .area-label { opacity: 0; pointer-events: none; }
 
-  .pin-icon { background: none; border: 0; }
+  .pin-btn { position: absolute; left: 0; top: 0; width: 34px; height: 34px; padding: 0; border: 0; background: none; cursor: pointer; pointer-events: auto; will-change: transform; overflow: visible; }
+  .pin-btn > * { animation: pop .28s ease-out both; transform-origin: 50% 100%; }
+  @keyframes pop { from { opacity: 0; scale: .4; } }
   .pin {
     width: 34px; height: 34px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg);
     background: var(--c); border: 2.5px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,.35);
@@ -234,7 +248,7 @@
 
   @media (min-width: 720px) {
     .sheet { left: 12px; right: auto; width: 420px; bottom: 12px; border-radius: 18px; max-height: calc(100% - 24px); }
-    .modal { left: 50%; width: 520px; transform: translateX(-50%); box-shadow: var(--shadow); }
+    .modal { left: 50%; width: 520px; transform: translateX(-50%); box-shadow: var(--shadow-box); }
   }
 </style>
 </head>
@@ -258,7 +272,12 @@
   <nav class="chips" id="areaChips"></nav>
 
   <div class="map-wrap">
-    <div id="map"></div>
+    <div id="map">
+      <svg id="mapSvg" aria-hidden="true"></svg>
+      <svg id="leaders" aria-hidden="true"></svg>
+      <div id="areaLabels"></div>
+      <div id="pins"></div>
+    </div>
     <div class="hint" id="hint" data-i18n="hint"></div>
 
     <section class="sheet" id="sheet" aria-hidden="true">
@@ -379,8 +398,6 @@
   };
   const CAT_KEYS = ['all', 'restaurant', 'cafe', 'activity'];
   const FALLBACK_AREA_COLORS = ['#e4572e', '#3a7bd5', '#2a9d8f', '#8e5bd6', '#e9a23b', '#d6457a'];
-  // 구역 좌표가 하나도 없을 때만 쓰는 지도 초기 화면 (대구 시내 대략 중심)
-  const DAEGU_VIEW = { center: [35.8714, 128.6014], zoom: 12 };
 
   /* =========================================================
    * localStorage (실패해도 앱은 동작)
@@ -479,74 +496,130 @@
   });
 
   /* =========================================================
-   * 지도
+   * 지도 (대구만 오려낸 일러스트 — 타일 없음, 구역을 누르면 SVG 시점만 부드럽게 이동)
    * ========================================================= */
-  const map = L.map('map', { zoomControl: false });
-  L.control.zoom({ position: 'topright' }).addTo(map);
-  map.attributionControl.setPosition('topleft'); // 바텀시트에 가리지 않게
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-  }).addTo(map);
-  map.setView(DAEGU_VIEW.center, DAEGU_VIEW.zoom);
+  const NS = 'http://www.w3.org/2000/svg';
+  const MIN_BLOB_PX = 10;                       // 전체 화면에서도 누를 수 있게 하는 원의 최소 반지름
+  const mapEl = $('#map'), mapSvg = $('#mapSvg'), leadersSvg = $('#leaders');
+  const labelsEl = $('#areaLabels'), pinsEl = $('#pins');
+  const reduceMotion = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
 
-  const areaLayer = L.featureGroup().addTo(map);
-  const pinLayer = L.layerGroup().addTo(map);
-  const areaShapes = {}; // id -> { circle, label }
+  let SHAPE = null;                             // daegu-shape.json
+  let W = 0, H = 0;                             // 지도 영역 크기(px)
+  const V = { x: 0, y: 0, w: 1, h: 1 };         // 지금 보이는 영역(SVG 좌표)
+  const areaEls = {};                           // id -> { circle, label, leader, ax, ay, rUnits, off }
+  const pinEls = [];
+  let shadowG, districtTexts = [], animId = 0;
 
-  function areaLabelIcon(a) {
-    const n = names(a);
-    return L.divIcon({
-      className: 'area-label',
-      html: `<div style="--c:${a.color}"><b>${esc(n.main)}</b>${n.sub ? `<small>${esc(n.sub)}</small>` : ''}</div>`,
-      iconSize: [0, 0],
+  function svgEl(name, attrs, parent) {
+    const e = document.createElementNS(NS, name);
+    Object.entries(attrs || {}).forEach(([k, v]) => e.setAttribute(k, v));
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function project(lat, lng) {                  // 위도·경도 -> SVG 좌표
+    const P = SHAPE.projection;
+    return [(lng - P.lon0) * P.cos * P.k, (P.lat0 - lat) * P.k];
+  }
+  const metersToUnits = m => m / (111320 / SHAPE.projection.k);
+  const toPx = (x, y, v) => { v = v || V; return [(x - v.x) / v.w * W, (y - v.y) / v.h * H]; };
+  function measure() { W = mapEl.clientWidth; H = mapEl.clientHeight; }
+
+  function buildMap() {
+    shadowG = svgEl('g', { class: 'shadow' }, mapSvg);
+    const land = svgEl('g', { class: 'land' }, mapSvg);
+    const lines = svgEl('g', { class: 'lines' }, mapSvg);
+    const dl = svgEl('g', { class: 'dlabels' }, mapSvg);
+    svgEl('g', { class: 'blobs' }, mapSvg);
+    SHAPE.districts.forEach(d => {
+      svgEl('path', { d: d.d }, shadowG);
+      svgEl('path', { d: d.d }, land);
+      svgEl('path', { d: d.d }, lines);
+      const t = svgEl('text', { x: d.label[0], y: d.label[1], 'text-anchor': 'middle', 'dominant-baseline': 'central' }, dl);
+      districtTexts.push([t, d]);
     });
+    renderDistrictNames();
+  }
+  function renderDistrictNames() {
+    districtTexts.forEach(([t, d]) => { t.textContent = lang === 'ja' ? d.name_ja : d.name_ko; });
+  }
+
+  function areaLabelHTML(a) {
+    const n = names(a);
+    return `<b>${esc(n.main)}</b>${n.sub ? `<small>${esc(n.sub)}</small>` : ''}`;
   }
 
   function drawAreas() {
+    const blobs = mapSvg.querySelector('.blobs');
     S.areas.forEach(a => {
       if (!a.hasCoords) return;
-      const circle = L.circle([toNum(a.lat), toNum(a.lng)], {
-        radius: toNum(a.radius) > 0 ? toNum(a.radius) : 600,
-        color: a.color, weight: 2, fillColor: a.color, fillOpacity: 0.22,
-      }).addTo(areaLayer);
-      circle.on('click', () => selectArea(a.id));
-      const label = L.marker([toNum(a.lat), toNum(a.lng)], { icon: areaLabelIcon(a), keyboard: false })
-        .addTo(map);
-      label.on('click', () => selectArea(a.id));
-      areaShapes[a.id] = { circle, label };
+      const [ax, ay] = project(toNum(a.lat), toNum(a.lng));
+      const circle = svgEl('circle', { cx: ax, cy: ay, r: 1, fill: a.color, stroke: a.color }, blobs);
+      circle.addEventListener('click', () => selectArea(a.id));
+      const leader = svgEl('line', { class: 'leader', stroke: a.color }, leadersSvg);
+      const label = document.createElement('button');
+      label.type = 'button';
+      label.className = 'area-label';
+      label.style.setProperty('--c', a.color);
+      label.innerHTML = areaLabelHTML(a);
+      label.addEventListener('click', () => selectArea(a.id));
+      labelsEl.appendChild(label);
+      areaEls[a.id] = { circle, label, leader, ax, ay, rUnits: metersToUnits(toNum(a.radius) > 0 ? toNum(a.radius) : 600), off: { dx: 0, dy: -34 } };
     });
   }
 
   function styleAreas() {
-    Object.entries(areaShapes).forEach(([id, { circle, label }]) => {
-      const el = label.getElement();
-      const sel = S.currentArea === id;
-      const other = S.currentArea && !sel;
-      circle.setStyle({ fillOpacity: sel ? 0.08 : other ? 0.07 : 0.22, opacity: other ? 0.4 : 1 });
-      if (el) {
-        el.classList.toggle('faded', !!other);
-        el.classList.toggle('selected', sel);
-      }
+    const zoomed = !!S.currentArea;
+    mapEl.classList.toggle('zoomed', zoomed);
+    Object.entries(areaEls).forEach(([id, a]) => {
+      const sel = S.currentArea === id, other = zoomed && !sel;
+      a.circle.style.fillOpacity = sel ? 0.14 : other ? 0.1 : 0.45;
+      a.circle.style.strokeOpacity = other ? 0.35 : 1;
     });
   }
 
-  function pinIcon(p) {
+  /* 전체 화면에서 구역 이름표가 서로 안 겹치게 자리 잡기 */
+  function layoutLabels(view) {
+    const placed = [];
+    const ids = Object.keys(areaEls);
+    const anchors = ids.map(id => toPx(areaEls[id].ax, areaEls[id].ay, view));
+    const hit = (r1, r2) => r1.l < r2.r && r1.r > r2.l && r1.t < r2.b && r1.b > r2.t;
+    ids.forEach((id, i) => {
+      const a = areaEls[id], [px, py] = anchors[i];
+      const w = a.label.offsetWidth + 6, h = a.label.offsetHeight + 4;
+      let chosen = null;
+      search:
+      for (const dist of [30, 52, 78, 106]) {
+        for (const [ux, uy] of [[0, -1], [0, 1], [1, 0], [-1, 0], [.8, -.8], [-.8, -.8], [.8, .8], [-.8, .8]]) {
+          const dx = ux * (dist + Math.abs(ux) * w / 2), dy = uy * (dist + Math.abs(uy) * h / 2);
+          const r = { l: px + dx - w / 2, r: px + dx + w / 2, t: py + dy - h / 2, b: py + dy + h / 2 };
+          if (r.l < 4 || r.r > W - 4 || r.t < 4 || r.b > H - 4) continue;
+          if (placed.some(q => hit(r, q))) continue;
+          if (anchors.some(([qx, qy]) => hit(r, { l: qx - 12, r: qx + 12, t: qy - 12, b: qy + 12 }))) continue;
+          chosen = { dx, dy, r };
+          break search;
+        }
+      }
+      if (!chosen) chosen = { dx: 0, dy: -34, r: { l: px - w / 2, r: px + w / 2, t: py - 34 - h / 2, b: py - 34 + h / 2 } };
+      a.off = { dx: chosen.dx, dy: chosen.dy };
+      placed.push(chosen.r);
+    });
+  }
+
+  function renderAreaLabels() {
+    S.areas.forEach(a => { if (areaEls[a.id]) areaEls[a.id].label.innerHTML = areaLabelHTML(a); });
+    layoutLabels(overviewView());
+    applyView();
+  }
+
+  function pinHTML(p) {
     const c = catOf(p);
     if (favs.has(p.id)) {
-      return L.divIcon({
-        className: 'pin-icon',
-        html: `<div class="pin-fav"><svg viewBox="0 0 42 40" width="42" height="40">
-          <path d="M21 37 C9 28 2.5 21 2.5 12.5 A9.5 9.5 0 0 1 21 8.5 A9.5 9.5 0 0 1 39.5 12.5 C39.5 21 33 28 21 37 Z"
-            fill="${c.color}" stroke="#fff" stroke-width="2.5"/></svg><span>${c.icon}</span></div>`,
-        iconSize: [42, 40], iconAnchor: [21, 38],
-      });
+      return `<div class="pin-fav"><svg viewBox="0 0 42 40" width="42" height="40">
+        <path d="M21 37 C9 28 2.5 21 2.5 12.5 A9.5 9.5 0 0 1 21 8.5 A9.5 9.5 0 0 1 39.5 12.5 C39.5 21 33 28 21 37 Z"
+          fill="${c.color}" stroke="#fff" stroke-width="2.5"/></svg><span>${c.icon}</span></div>`;
     }
-    return L.divIcon({
-      className: 'pin-icon',
-      html: `<div class="pin" style="--c:${c.color}"><span>${c.icon}</span></div>`,
-      iconSize: [34, 34], iconAnchor: [17, 41],
-    });
+    return `<div class="pin" style="--c:${c.color}"><span>${c.icon}</span></div>`;
   }
 
   function visiblePlaces() {
@@ -555,37 +628,114 @@
   }
 
   function renderPins() {
-    pinLayer.clearLayers();
+    pinsEl.innerHTML = '';
+    pinEls.length = 0;
+    if (!SHAPE) return;
     visiblePlaces().forEach(p => {
       if (!p.hasCoords) return;
-      const m = L.marker([toNum(p.lat), toNum(p.lng)], {
-        icon: pinIcon(p), title: names(p).main, zIndexOffset: favs.has(p.id) ? 500 : 0,
-      });
-      m.on('click', () => openDetail(p.id));
-      m.addTo(pinLayer);
+      const [x, y] = project(toNum(p.lat), toNum(p.lng));
+      const fav = favs.has(p.id);
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'pin-btn';
+      b.setAttribute('aria-label', names(p).main);
+      b.title = names(p).main;
+      b.style.zIndex = fav ? 2 : 1;
+      b.innerHTML = pinHTML(p);
+      b.addEventListener('click', () => openDetail(p.id));
+      pinsEl.appendChild(b);
+      pinEls.push({ el: b, x, y, ax: fav ? 21 : 17, ay: fav ? 38 : 41 });
+    });
+    applyView();
+  }
+
+  /* 지금 시점(V)을 화면에 반영 — 확대 애니메이션 중엔 매 프레임 호출됨 */
+  function applyView() {
+    if (!SHAPE || !W) return;
+    mapSvg.setAttribute('viewBox', `${V.x} ${V.y} ${V.w} ${V.h}`);
+    const s = V.w / W;                          // 화면 1px 당 SVG 단위
+    shadowG.setAttribute('transform', `translate(0 ${(6 * s).toFixed(3)})`);
+    districtTexts.forEach(([t]) => t.setAttribute('font-size', (13 * s).toFixed(3)));
+    Object.values(areaEls).forEach(a => {
+      a.circle.setAttribute('r', Math.max(a.rUnits, MIN_BLOB_PX * s).toFixed(3));
+      const [px, py] = toPx(a.ax, a.ay);
+      a.label.style.transform = `translate(${(px + a.off.dx).toFixed(1)}px, ${(py + a.off.dy).toFixed(1)}px) translate(-50%, -50%)`;
+      a.leader.setAttribute('x1', px.toFixed(1)); a.leader.setAttribute('y1', py.toFixed(1));
+      a.leader.setAttribute('x2', (px + a.off.dx).toFixed(1)); a.leader.setAttribute('y2', (py + a.off.dy).toFixed(1));
+    });
+    pinEls.forEach(p => {
+      const [px, py] = toPx(p.x, p.y);
+      p.el.style.transform = `translate(${(px - p.ax).toFixed(1)}px, ${(py - p.ay).toFixed(1)}px)`;
     });
   }
+
+  /* 화면에 맞는 시점 계산: bounds=[x0,y0,x1,y1], bottom/left=시트가 가리는 부분(px) */
+  function viewFor(bounds, o) {
+    const pad = o.pad == null ? 16 : o.pad, bottom = o.bottom || 0, left = o.left || 0;
+    const ext = metersToUnits(120);
+    let [x0, y0, x1, y1] = bounds;
+    if (x1 - x0 < ext) { x0 -= ext / 2; x1 += ext / 2; }
+    if (y1 - y0 < ext) { y0 -= ext / 2; y1 += ext / 2; }
+    const availW = Math.max(80, W - left - 2 * pad), availH = Math.max(80, H - bottom - 2 * pad);
+    const sc = Math.max((x1 - x0) / availW, (y1 - y0) / availH);
+    const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
+    return { x: cx - (left + (W - left) / 2) * sc, y: cy - ((H - bottom) / 2) * sc, w: W * sc, h: H * sc };
+  }
+
+  function goTo(v, animate) {
+    cancelAnimationFrame(animId);
+    if (!animate || reduceMotion || !W) { Object.assign(V, v); applyView(); return; }
+    const from = { ...V }, t0 = performance.now(), dur = 650;
+    const c0x = from.x + from.w / 2, c0y = from.y + from.h / 2, c1x = v.x + v.w / 2, c1y = v.y + v.h / 2;
+    const step = now => {
+      const k = Math.min(1, (now - t0) / dur);
+      const e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+      V.w = from.w * Math.pow(v.w / from.w, e);   // 확대 배율은 로그 보간 → 자연스러운 줌
+      V.h = V.w * H / W;
+      V.x = c0x + (c1x - c0x) * e - V.w / 2;
+      V.y = c0y + (c1y - c0y) * e - V.h / 2;
+      if (k < 1) { applyView(); animId = requestAnimationFrame(step); }
+      else { Object.assign(V, v); applyView(); }
+    };
+    animId = requestAnimationFrame(step);
+  }
+
+  function overviewBounds() {
+    let [x0, y0, x1, y1] = SHAPE.bounds;
+    Object.values(areaEls).forEach(a => {
+      x0 = Math.min(x0, a.ax - a.rUnits); y0 = Math.min(y0, a.ay - a.rUnits);
+      x1 = Math.max(x1, a.ax + a.rUnits); y1 = Math.max(y1, a.ay + a.rUnits);
+    });
+    return [x0, y0, x1, y1];
+  }
+  const overviewView = () => viewFor(overviewBounds(), { pad: 14 });
 
   function fitOverview(animate) {
-    const b = areaLayer.getBounds();
-    if (b.isValid()) map.flyToBounds(b, { padding: [24, 24], duration: animate ? 0.6 : 0, animate: !!animate, maxZoom: 15 });
-    else map.setView(DAEGU_VIEW.center, DAEGU_VIEW.zoom);
+    const v = overviewView();
+    layoutLabels(v);
+    goTo(v, animate);
   }
 
-  function fitArea() {
-    const shape = areaShapes[S.currentArea];
-    let b = shape ? L.latLngBounds(shape.circle.getBounds().getSouthWest(), shape.circle.getBounds().getNorthEast()) : null;
+  function fitArea(animate = true) {
+    const a = areaEls[S.currentArea];
+    const sheet = $('#sheet'), wide = window.innerWidth >= 720;
+    const bottom = wide ? 0 : sheet.offsetHeight, left = wide ? sheet.offsetWidth + 24 : 0;
+    let b = null;
+    const add = (x0, y0, x1, y1) => { b = b ? [Math.min(b[0], x0), Math.min(b[1], y0), Math.max(b[2], x1), Math.max(b[3], y1)] : [x0, y0, x1, y1]; };
+    if (a) add(a.ax - a.rUnits, a.ay - a.rUnits, a.ax + a.rUnits, a.ay + a.rUnits);
+    const m = metersToUnits(60);
     S.places.forEach(p => {
       if (p.area_id !== S.currentArea || !p.hasCoords) return;
-      const ll = L.latLng(toNum(p.lat), toNum(p.lng));
-      b = b ? b.extend(ll) : L.latLngBounds(ll, ll);
+      const [x, y] = project(toNum(p.lat), toNum(p.lng));
+      add(x - m, y - m, x + m, y + m);
     });
-    if (!b || !b.isValid()) return;
-    const sheet = $('#sheet');
-    const wide = window.innerWidth >= 720;
-    const padBottom = wide ? 20 : sheet.offsetHeight + 16;
-    const padLeft = wide ? sheet.offsetWidth + 24 : 16;
-    map.flyToBounds(b, { paddingTopLeft: [padLeft, 16], paddingBottomRight: [16, padBottom], duration: 0.6, maxZoom: 17 });
+    goTo(b ? viewFor(b, { pad: 22, bottom, left }) : viewFor(overviewBounds(), { pad: 14, bottom, left }), animate);
+  }
+
+  function onResize() {
+    if (!SHAPE) return;
+    measure();
+    if (S.currentArea) { layoutLabels(overviewView()); fitArea(false); } else fitOverview(false);
   }
 
   /* =========================================================
@@ -702,7 +852,7 @@
     sheet.classList.remove('open');
     sheet.setAttribute('aria-hidden', 'true');
     $('#hint').hidden = false;
-    pinLayer.clearLayers();
+    renderPins();
     renderAreaChips();
     styleAreas();
     fitOverview(true);
@@ -974,7 +1124,8 @@
     store.set('daegu-map:lang', lang);
     applyLang();
     renderAreaChips();
-    Object.entries(areaShapes).forEach(([id, s]) => s.label.setIcon(areaLabelIcon(S.areaById[id])));
+    renderDistrictNames();
+    renderAreaLabels();
     styleAreas();
     if (S.currentArea) { renderSheet(); renderPins(); }
     if (S.detailId) renderDetail();
@@ -984,7 +1135,7 @@
 
   $('#noticeClose').addEventListener('click', () => {
     $('#notice').hidden = true;
-    map.invalidateSize();
+    requestAnimationFrame(onResize);
   });
 
   /* =========================================================
@@ -1026,7 +1177,8 @@
     applyLang();
     try { history.replaceState(null, ''); } catch (e) {}
     try {
-      const [areas, places] = await Promise.all([loadJSON('areas.json'), loadJSON('places.json')]);
+      const [areas, places, shape] = await Promise.all([loadJSON('areas.json'), loadJSON('places.json'), loadJSON('daegu-shape.json')]);
+      SHAPE = shape;
       prepare(areas, places);
     } catch (err) {
       console.error(err);
@@ -1035,15 +1187,19 @@
       box.innerHTML = `<div><b>${esc(t('load_err'))}</b><br>${esc(String(err.message || err))}<br><br>
         ${location.protocol === 'file:'
           ? 'index.html을 더블클릭으로 열면 json을 못 읽어요.<br>폴더에서 <code>python3 -m http.server</code> 실행 후<br><code>http://localhost:8000</code> 으로 열어 주세요.'
-          : 'areas.json / places.json 문법(쉼표, 따옴표)을 확인해 주세요.'}</div>`;
+          : 'areas.json / places.json / daegu-shape.json 문법(쉼표, 따옴표)을 확인해 주세요.'}</div>`;
       $('.map-wrap').appendChild(box);
       return;
     }
+    measure();
+    buildMap();
     drawAreas();
     renderAreaChips();
     $('#favCount').textContent = favPlaces().length;
     styleAreas();
     fitOverview(false);
+    if (window.ResizeObserver) new ResizeObserver(() => requestAnimationFrame(onResize)).observe(mapEl);
+    else window.addEventListener('resize', onResize);
   }
 
   init();
