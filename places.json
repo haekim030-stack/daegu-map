@@ -352,5 +352,23 @@
       "images/starbucks/4-audio-room.jpg"
     ],
     "menu": []
+  },
+  {
+    "id": "seomun-night-market",
+    "area_id": "seomun",
+    "category": "activity",
+    "name_ko": "서문시장 야시장",
+    "name_ja": "西門市場 夜市（ナイトマーケット）",
+    "desc_ko": "서문시장 앞 길에 저녁마다 노점이 줄지어 서는 야시장. 만두, 꼬치, 떡볶이 같은 길거리 음식을 걸으면서 골라 먹는 재미가 있어요.",
+    "desc_ja": "西門市場の前の通りに、夕方から屋台がずらりと並ぶナイトマーケット。マンドゥ（餃子）や串焼き、トッポッキなどの屋台グルメを、食べ歩きで楽しめます。",
+    "hours_ja": "",
+    "hours_ko": "",
+    "naver_query": "서문시장 야시장",
+    "photos": [
+      "images/seomun/1-gate.jpg",
+      "images/seomun/2-stalls.jpg",
+      "images/seomun/3-street.jpg"
+    ],
+    "menu": []
   }
 ]

@@ -651,10 +651,33 @@ a { color: inherit; }
     });
   }
 
+  /* 화면에서 너무 가까운 핀끼리는 살짝 밀어내서 겹치지 않게 (핀은 대략적인 위치만 나타내므로) */
+  const PIN_GAP = 30;
+  function pinPoints(view) {
+    const ids = Object.keys(areaEls);
+    const p = ids.map(id => toPx(areaEls[id].ax, areaEls[id].ay, view));
+    for (let it = 0; it < 40; it++) {
+      let moved = false;
+      for (let i = 0; i < p.length; i++) for (let j = i + 1; j < p.length; j++) {
+        let dx = p[j][0] - p[i][0], dy = p[j][1] - p[i][1], d = Math.hypot(dx, dy);
+        if (d >= PIN_GAP) continue;
+        if (d < .01) { dx = 1; dy = 0; d = 1; }
+        const push = (PIN_GAP - d) / 2, ux = dx / d, uy = dy / d;
+        p[i][0] -= ux * push; p[i][1] -= uy * push;
+        p[j][0] += ux * push; p[j][1] += uy * push;
+        moved = true;
+      }
+      if (!moved) break;
+    }
+    const out = {};
+    ids.forEach((id, i) => { out[id] = p[i]; });
+    return out;
+  }
+
   /* 전체 화면에서 구역 이름표가 핀·다른 이름표와 안 겹치게 자리 잡기 */
   function layoutLabels(view) {
     const ids = Object.keys(areaEls);
-    const tips = ids.map(id => toPx(areaEls[id].ax, areaEls[id].ay, view));
+    const shown = pinPoints(view), tips = ids.map(id => shown[id]);
     const pinRects = tips.map(([px, py]) => ({ l: px - 20, r: px + 20, t: py - PIN_H - 6, b: py + 2 }));
     const placed = [];
     const hit = (r1, r2) => r1.l < r2.r && r1.r > r2.l && r1.t < r2.b && r1.b > r2.t;
@@ -693,8 +716,9 @@ a { color: inherit; }
     const s = V.w / W;                          // 화면 1px 당 SVG 단위
     shadowG.setAttribute('transform', `translate(0 ${(5 * s).toFixed(3)})`);
     districtTexts.forEach(([tx]) => tx.setAttribute('font-size', (11.5 * s).toFixed(3)));
-    Object.values(areaEls).forEach(a => {
-      const [px, py] = toPx(a.ax, a.ay);
+    const shown = pinPoints(V);
+    Object.entries(areaEls).forEach(([id, a]) => {
+      const [px, py] = shown[id];
       a.pin.style.transform = `translate(${(px - PIN_W / 2).toFixed(1)}px, ${(py - PIN_TIP_Y).toFixed(1)}px)`;
       a.label.style.transform = `translate(${(px + a.off.dx).toFixed(1)}px, ${(py + a.off.dy).toFixed(1)}px) translate(-50%, -50%)`;
       a.leader.setAttribute('x1', px.toFixed(1)); a.leader.setAttribute('y1', (py - 24).toFixed(1));
