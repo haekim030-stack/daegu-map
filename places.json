@@ -370,5 +370,24 @@
       "images/seomun/3-street.jpg"
     ],
     "menu": []
+  },
+  {
+    "id": "hyangchon-culture-center",
+    "area_id": "dongseongno",
+    "category": "activity",
+    "name_ko": "향촌문화관",
+    "name_ja": "香村文化館（ヒャンチョン文化館）",
+    "desc_ko": "1950년대 무렵 대구 향촌동 거리를 재현한 전시관. 옛날 가게와 골목을 걸어볼 수 있고, 교복 같은 옛날 옷을 입고 사진도 찍을 수 있어요.",
+    "desc_ja": "1950年代ごろの大邱・香村洞（ヒャンチョンドン）の街並みを再現した展示館。昔のお店や路地を歩けて、制服などのレトロな服を着て写真も撮れます。",
+    "hours_ja": "",
+    "hours_ko": "",
+    "naver_query": "향촌문화관",
+    "photos": [
+      "images/hyangchon/1-street.jpg",
+      "images/hyangchon/2-shops.jpg",
+      "images/hyangchon/3-pub.jpg",
+      "images/hyangchon/4-costume.jpg"
+    ],
+    "menu": []
   }
 ]
