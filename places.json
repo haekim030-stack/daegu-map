@@ -321,19 +321,6 @@
     ]
   },
   {
-    "id": "ttangttang-chicken-land",
-    "area_id": "dongseongno",
-    "category": "activity",
-    "name_ko": "치킨체험 테마파크 땅땅치킨랜드",
-    "name_ja": "チキン体験テーマパーク ッタンッタンチキンランド",
-    "desc_ja": "",
-    "desc_ko": "",
-    "hours_ja": "",
-    "hours_ko": "",
-    "photos": [],
-    "menu": []
-  },
-  {
     "id": "starbucks-jongno-gotaek",
     "area_id": "dongseongno",
     "category": "cafe",
