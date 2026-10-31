@@ -1,24 +1,24 @@
 [
   {
-    "id": "dongseongno",
-    "name_ja": "【サンプル】東城路",
-    "name_ko": "[샘플] 동성로",
-    "desc_ja": "大邱いちばんの繁華街。ショッピングも食べ歩きもここで。（サンプル説明）",
-    "desc_ko": "대구 최대 번화가. 쇼핑도 먹방도 여기서. (샘플 설명)",
-    "lat": 35.8694,
-    "lng": 128.5958,
-    "radius": 700,
-    "color": "#e4572e"
+    "id": "dongdaegu",
+    "name_ja": "東大邱駅",
+    "name_ko": "동대구역",
+    "desc_ja": "",
+    "desc_ko": "",
+    "lat": null,
+    "lng": null,
+    "radius": 600,
+    "color": "#3a7bd5"
   },
   {
-    "id": "suseongmot",
-    "name_ja": "【サンプル】寿城池",
-    "name_ko": "[샘플] 수성못",
-    "desc_ja": "湖のまわりをのんびり散歩。夜景もきれいなエリア。（サンプル説明）",
-    "desc_ko": "호수 둘레를 느긋하게 산책. 야경도 예쁜 곳. (샘플 설명)",
-    "lat": 35.8283,
-    "lng": 128.6168,
-    "radius": 800,
-    "color": "#3a7bd5"
+    "id": "dongseongno",
+    "name_ja": "東城路",
+    "name_ko": "동성로",
+    "desc_ja": "",
+    "desc_ko": "",
+    "lat": null,
+    "lng": null,
+    "radius": 700,
+    "color": "#e4572e"
   }
 ]

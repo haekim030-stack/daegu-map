@@ -771,6 +771,7 @@
       <div class="detail-main">
         <h2>${esc(n.main)}</h2>
         ${n.sub ? `<div class="ko">${esc(n.sub)}</div>` : ''}
+        ${p.address_ko ? `<div class="ko">📍 ${esc(p.address_ko)}</div>` : ''}
         <div class="tags">${tags.join('')}</div>
         ${txt(p, 'desc') ? `<p>${esc(txt(p, 'desc'))}</p>` : ''}
         ${hours ? `<div class="section-title">${esc(t('hours'))}</div><div class="hours">${esc(hours)}</div>` : ''}
@@ -787,12 +788,16 @@
     }
 
     const naverQuery = (p.naver_query || p.name_ko || p.name_ja || '').trim();
+    const naverUrl = /^https?:\/\//.test(p.naver_url || '')
+      ? p.naver_url
+      : `https://map.naver.com/p/search/${encodeURIComponent(naverQuery)}`;
+    const googleQuery = (p.address_ko || naverQuery).trim();
     const googleUrl = p.hasCoords
       ? `https://www.google.com/maps/search/?api=1&query=${toNum(p.lat)},${toNum(p.lng)}`
-      : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(naverQuery)}`;
+      : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(googleQuery)}`;
     $('#detailActions').innerHTML = `
       <button class="act fav ${favs.has(p.id) ? 'on' : ''}" type="button" data-fav="${esc(p.id)}">${esc(favs.has(p.id) ? t('fav_on') : t('fav_off'))}</button>
-      <a class="act naver" href="https://map.naver.com/p/search/${encodeURIComponent(naverQuery)}" target="_blank" rel="noopener">${esc(t('naver'))}</a>
+      <a class="act naver" href="${esc(naverUrl)}" target="_blank" rel="noopener">${esc(t('naver'))}</a>
       <a class="act" href="${googleUrl}" target="_blank" rel="noopener">${esc(t('google'))}</a>`;
   }
 
