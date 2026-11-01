@@ -698,5 +698,22 @@
         "signature": true
       }
     ]
+  },
+  {
+    "id": "shinsegae-daegu",
+    "area_id": "dongdaegu",
+    "category": "shop",
+    "name_ko": "신세계백화점 대구점",
+    "name_ja": "新世界百貨店 大邱店",
+    "desc_ko": "동대구역과 바로 이어진 대형 백화점. 쇼핑과 식당가는 물론 아쿠아리움도 있어서, 기차 타기 전후로 들르기 좋아요.",
+    "desc_ja": "東大邱駅と直結した大型デパート。ショッピングやレストラン街のほか水族館もあって、列車に乗る前後に立ち寄るのにぴったりです。",
+    "hours_ja": "",
+    "hours_ko": "",
+    "address_ko": "대구 동구 동부로 149",
+    "naver_url": "https://naver.me/xVBxHV94",
+    "photos": [
+      "images/shinsegae/1-exterior.jpg"
+    ],
+    "menu": []
   }
 ]
