@@ -715,5 +715,279 @@
       "images/shinsegae/1-exterior.jpg"
     ],
     "menu": []
+  },
+  {
+    "id": "frank-plank",
+    "area_id": "dongdaegu",
+    "category": "cafe",
+    "name_ko": "프랭크 플랭크 (FRANK PLANK)",
+    "name_ja": "フランク・プランク（FRANK PLANK）",
+    "desc_ko": "주문하면 바로 구워 주는 두툼한 수제 팬케이크 카페. 버터크림 라떼 '프랭크 무스'가 시그니처예요. 아이용 우유와 반려견용 '멍푸치노'는 무료래요.",
+    "desc_ja": "注文後に焼き上げる、厚みのある手作りパンケーキのカフェ。バタークリームラテ「FRANKムース」が看板ドリンク。子ども用のミルクと、ワンちゃん用の「ワンプチーノ」は無料だそうです。",
+    "hours_ja": "",
+    "hours_ko": "",
+    "naver_url": "https://naver.me/xs3GMZ8C",
+    "photos": [
+      "images/frankplank/bbc.jpg",
+      "images/frankplank/classic.jpg",
+      "images/frankplank/menu-board.jpg"
+    ],
+    "menu": [
+      {
+        "section_ko": "팬케이크",
+        "section_ja": "パンケーキ",
+        "name_ko": "클래식 팬케이크",
+        "name_ja": "クラシックパンケーキ",
+        "price": 15000,
+        "photo": "images/frankplank/classic.jpg",
+        "desc_ko": "주문 즉시 구워 주는 폭신한 수제 팬케이크 (초코휘핑·메이플시럽·아이스크림)",
+        "desc_ja": "注文後に焼き上げる、ふわふわの手作りパンケーキ（チョコホイップ・メープルシロップ・アイスクリーム添え）",
+        "signature": true
+      },
+      {
+        "section_ko": "팬케이크",
+        "section_ja": "パンケーキ",
+        "name_ko": "버터크림 팬케이크 (B.C)",
+        "name_ja": "バタークリームパンケーキ（B.C）",
+        "price": 15000,
+        "photo": "images/frankplank/butter-cream.jpg",
+        "desc_ko": "버터크림 위에 블루베리 콤포트를 올린 팬케이크",
+        "desc_ja": "バタークリームの上にブルーベリーコンポートをのせたパンケーキ",
+        "signature": true
+      },
+      {
+        "section_ko": "팬케이크",
+        "section_ja": "パンケーキ",
+        "name_ko": "바나나 브륄레 초코 팬케이크 (B.B.C)",
+        "name_ja": "バナナブリュレ・チョコパンケーキ（B.B.C）",
+        "price": 17000,
+        "photo": "images/frankplank/bbc.jpg",
+        "desc_ko": "그을린 바나나 브륄레와 초코, 크림을 올린 팬케이크",
+        "desc_ja": "香ばしく焦がしたバナナブリュレに、チョコとクリームを合わせたパンケーキ",
+        "signature": true
+      },
+      {
+        "section_ko": "팬케이크",
+        "section_ja": "パンケーキ",
+        "name_ko": "애플시나몬 팬케이크 (A.C.C)",
+        "name_ja": "アップルシナモンパンケーキ（A.C.C）",
+        "price": 15000,
+        "photo": "images/frankplank/acc.jpg",
+        "desc_ko": "시나몬 크런치 시리얼과 애플시나몬 콤포트, 크림을 올린 팬케이크",
+        "desc_ja": "シナモンクランチシリアルとアップルシナモンのコンポート、クリームをのせたパンケーキ",
+        "signature": true
+      },
+      {
+        "section_ko": "팬케이크",
+        "section_ja": "パンケーキ",
+        "name_ko": "카야 팬케이크",
+        "name_ja": "カヤパンケーキ",
+        "price": 15000,
+        "photo": "",
+        "desc_ko": "아이스크림과 카야잼을 바른 팬케이크 두 장을 얇게 접은 팬케이크",
+        "desc_ja": "アイスクリームと、カヤジャムを塗って薄く折りたたんだ2枚のパンケーキ"
+      },
+      {
+        "section_ko": "타르트",
+        "section_ja": "タルト",
+        "name_ko": "에그타르트",
+        "name_ja": "エッグタルト",
+        "price": 4500,
+        "photo": "",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "타르트",
+        "section_ja": "タルト",
+        "name_ko": "콘타르트",
+        "name_ja": "コーンタルト",
+        "price": 4500,
+        "photo": "",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "프랭크 시리즈",
+        "section_ja": "FRANKシリーズ",
+        "name_ko": "프랭크 무스",
+        "name_ja": "FRANKムース",
+        "price": 6000,
+        "photo": "images/frankplank/frank-mousse.jpg",
+        "desc_ko": "라떼 + 버터크림",
+        "desc_ja": "ラテ＋バタークリーム",
+        "signature": true
+      },
+      {
+        "section_ko": "프랭크 시리즈",
+        "section_ja": "FRANKシリーズ",
+        "name_ko": "프랭크 썸머 (아이스만)",
+        "name_ja": "FRANKサマー（アイスのみ）",
+        "price": 6000,
+        "photo": "",
+        "desc_ko": "라떼 + 아이스크림",
+        "desc_ja": "ラテ＋アイスクリーム"
+      },
+      {
+        "section_ko": "프랭크 시리즈",
+        "section_ja": "FRANKシリーズ",
+        "name_ko": "프랭크 커피 (아이스만)",
+        "name_ja": "FRANKコーヒー（アイスのみ）",
+        "price": 6000,
+        "photo": "",
+        "desc_ko": "베이스 속에 크림이 섞인 커피",
+        "desc_ja": "ベースにクリームを混ぜ込んだコーヒー"
+      },
+      {
+        "section_ko": "커피",
+        "section_ja": "コーヒー",
+        "name_ko": "아메리카노",
+        "name_ja": "アメリカーノ",
+        "price": 4800,
+        "photo": "",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "커피",
+        "section_ja": "コーヒー",
+        "name_ko": "카페라떼",
+        "name_ja": "カフェラテ",
+        "price": 5000,
+        "photo": "",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "커피",
+        "section_ja": "コーヒー",
+        "name_ko": "바닐라라떼",
+        "name_ja": "バニララテ",
+        "price": 5300,
+        "photo": "",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "커피",
+        "section_ja": "コーヒー",
+        "name_ko": "콜드브루 (디카페인)",
+        "name_ja": "コールドブリュー（デカフェ）",
+        "price": 5500,
+        "photo": "",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "논커피",
+        "section_ja": "ノンコーヒー",
+        "name_ko": "선셋 글로우 (아이스만)",
+        "name_ja": "サンセットグロウ（アイスのみ）",
+        "price": 5500,
+        "photo": "",
+        "desc_ko": "히비스커스 + 리치",
+        "desc_ja": "ハイビスカス＋ライチ"
+      },
+      {
+        "section_ko": "논커피",
+        "section_ja": "ノンコーヒー",
+        "name_ko": "녹봉라떼 (아이스만)",
+        "name_ja": "緑茶ピーチラテ（アイスのみ）",
+        "price": 5500,
+        "photo": "",
+        "desc_ko": "녹차 + 복숭아",
+        "desc_ja": "緑茶＋桃"
+      },
+      {
+        "section_ko": "논커피",
+        "section_ja": "ノンコーヒー",
+        "name_ko": "말차라떼",
+        "name_ja": "抹茶ラテ",
+        "price": 5500,
+        "photo": "",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "논커피",
+        "section_ja": "ノンコーヒー",
+        "name_ko": "석류에이드",
+        "name_ja": "ザクロエード",
+        "price": 5500,
+        "photo": "",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "논커피",
+        "section_ja": "ノンコーヒー",
+        "name_ko": "패션후르츠 에이드",
+        "name_ja": "パッションフルーツエード",
+        "price": 5500,
+        "photo": "",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "논커피",
+        "section_ja": "ノンコーヒー",
+        "name_ko": "청포도 에이드",
+        "name_ja": "青ぶどうエード",
+        "price": 5500,
+        "photo": "",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "논커피",
+        "section_ja": "ノンコーヒー",
+        "name_ko": "밀크티",
+        "name_ja": "ミルクティー",
+        "price": 5500,
+        "photo": "",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "티",
+        "section_ja": "ティー",
+        "name_ko": "라즈베리 & 석류",
+        "name_ja": "ラズベリー＆ザクロ",
+        "price": 5500,
+        "photo": "",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "티",
+        "section_ja": "ティー",
+        "name_ko": "페퍼민트",
+        "name_ja": "ペパーミント",
+        "price": 5500,
+        "photo": "",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "티",
+        "section_ja": "ティー",
+        "name_ko": "캐모마일",
+        "name_ja": "カモミール",
+        "price": 5500,
+        "photo": "",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "티",
+        "section_ja": "ティー",
+        "name_ko": "애플티",
+        "name_ja": "アップルティー",
+        "price": 5500,
+        "photo": "",
+        "desc_ko": "",
+        "desc_ja": ""
+      }
+    ]
   }
 ]
