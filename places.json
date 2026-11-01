@@ -396,5 +396,89 @@
     "menu": [],
     "address_ko": "대구 중구 중앙대로 455-2 2층 1호",
     "naver_url": "https://naver.me/FBMFVoPh"
+  },
+  {
+    "id": "eommabapsang-main",
+    "area_id": "palgongsan",
+    "category": "restaurant",
+    "name_ko": "팔공산 엄마밥상 본점",
+    "name_ja": "八公山 オンマパプサン 本店",
+    "desc_ko": "팔공산 자락의 한정식집. 갓 지은 솥밥에 생선구이, 전, 반찬이 한 상 가득 차려 나와요.",
+    "desc_ja": "八公山のふもとにある韓定食のお店。炊きたての釜飯に、焼き魚やチヂミ、おかずがテーブルいっぱいに並びます。",
+    "hours_ja": "",
+    "hours_ko": "",
+    "address_ko": "경북 칠곡군 팔공산로 157",
+    "naver_url": "https://naver.me/5DZaR1FQ",
+    "photos": [
+      "images/eommabapsang/eomma-bapsang.jpg",
+      "images/eommabapsang/gulbap.jpg",
+      "images/eommabapsang/neungi-sotbap.jpg"
+    ],
+    "menu": [
+      {
+        "section_ko": "식사",
+        "section_ja": "お食事",
+        "name_ko": "엄마상차림",
+        "name_ja": "オンマサンチャリム（おかずたっぷりの定食）",
+        "price": 17000,
+        "photo": "images/eommabapsang/eomma-sangcharim.jpg",
+        "desc_ko": "",
+        "desc_ja": "",
+        "signature": true
+      },
+      {
+        "section_ko": "식사",
+        "section_ja": "お食事",
+        "name_ko": "곤드레정식",
+        "name_ja": "コンドゥレご飯の定食",
+        "price": 19000,
+        "photo": "images/eommabapsang/gondre.jpg",
+        "desc_ko": "",
+        "desc_ja": "山菜コンドゥレ（高麗アザミ）の釜飯がつく定食",
+        "signature": true
+      },
+      {
+        "section_ko": "식사",
+        "section_ja": "お食事",
+        "name_ko": "능이영양솥밥",
+        "name_ja": "コウタケの栄養釜飯",
+        "price": 21000,
+        "photo": "images/eommabapsang/neungi-sotbap.jpg",
+        "desc_ko": "",
+        "desc_ja": "香りの強いきのこ・コウタケ（能栮）がたっぷり入った釜飯",
+        "signature": true
+      },
+      {
+        "section_ko": "식사",
+        "section_ja": "お食事",
+        "name_ko": "굴밥정식",
+        "name_ja": "牡蠣釜飯の定食",
+        "price": 22000,
+        "photo": "images/eommabapsang/gulbap.jpg",
+        "desc_ko": "",
+        "desc_ja": "",
+        "signature": true
+      },
+      {
+        "section_ko": "식사",
+        "section_ja": "お食事",
+        "name_ko": "엄마밥상",
+        "name_ja": "オンマパプサン（基本の定食）",
+        "price": 14000,
+        "photo": "images/eommabapsang/eomma-bapsang.jpg",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "계절 메뉴",
+        "section_ja": "季節メニュー",
+        "name_ko": "굴보쌈 (계절메뉴)",
+        "name_ja": "牡蠣ポッサム（季節メニュー）",
+        "price": 40000,
+        "photo": "images/eommabapsang/gul-bossam.jpg",
+        "desc_ko": "제철 굴과 수육을 함께 먹는 계절 메뉴. 네이버 기준 현재 판매 일시 중단",
+        "desc_ja": "旬の牡蠣とゆで豚を一緒に味わう季節メニュー。NAVER上では現在販売一時停止中"
+      }
+    ]
   }
 ]

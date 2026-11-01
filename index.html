@@ -864,7 +864,7 @@ a { color: inherit; }
     });
     return [x0, y0, x1, y1];
   }
-  const overviewView = () => viewFor(overviewBounds(), { pad: 18, bottom: 56 });   // 아래 안내 문구만큼 위로
+  const overviewView = () => viewFor(overviewBounds(), { pad: 18, bottom: 56, top: 44 });   // 위쪽은 핀 높이만큼 비움   // 아래 안내 문구만큼 위로
 
   function fitOverview(animate) {
     const v = overviewView();
