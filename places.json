@@ -1315,5 +1315,85 @@
         "desc_ja": ""
       }
     ]
+  },
+  {
+    "id": "jungang-tteokbokki",
+    "area_id": "dongseongno",
+    "category": "restaurant",
+    "name_ko": "중앙떡볶이",
+    "name_ja": "中央トッポッキ（チュンアン・トッポッキ）",
+    "desc_ko": "1979년에 문을 연 2·28공원 옆 떡볶이 노포. 분점 없이 이곳 하나뿐인 '대구 명물 떡볶이집'으로, 쌀떡볶이에 만두를 섞어 먹는 게 유명해요. 포장하면 용기값 500원이 추가돼요.",
+    "desc_ja": "1979年創業、2・28記念公園のそばにある老舗のトッポッキ店。支店はなくここだけの「大邱名物トッポッキ」で、米粉のトッポッキにマンドゥ（揚げ餃子）を混ぜて食べるのが定番です。テイクアウトは容器代500ウォンが追加されます。",
+    "hours_ja": "",
+    "hours_ko": "",
+    "naver_url": "https://naver.me/xq3aUHYP",
+    "photos": [
+      "images/jungang-tteok/1-tteokbokki.jpg",
+      "images/jungang-tteok/2-storefront.jpg",
+      "images/jungang-tteok/3-menu-board.jpg"
+    ],
+    "menu": [
+      {
+        "section_ko": "분식",
+        "section_ja": "粉食（軽食）",
+        "name_ko": "쌀떡볶이 + 만두 (섞어 1인분)",
+        "name_ja": "トッポッキ＋マンドゥ（ミックス1人前）",
+        "price": 5000,
+        "photo": "images/jungang-tteok/1-tteokbokki.jpg",
+        "desc_ko": "",
+        "desc_ja": "",
+        "signature": true
+      },
+      {
+        "section_ko": "분식",
+        "section_ja": "粉食（軽食）",
+        "name_ko": "쌀떡볶이",
+        "name_ja": "米粉のトッポッキ",
+        "price": 5000,
+        "photo": "",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "분식",
+        "section_ja": "粉食（軽食）",
+        "name_ko": "만두",
+        "name_ja": "マンドゥ（揚げ餃子）",
+        "price": 5000,
+        "photo": "",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "분식",
+        "section_ja": "粉食（軽食）",
+        "name_ko": "순대",
+        "name_ja": "スンデ（韓国式腸詰め）",
+        "price": 5000,
+        "photo": "",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "분식",
+        "section_ja": "粉食（軽食）",
+        "name_ko": "웰치스",
+        "name_ja": "ウェルチ（ジュース）",
+        "price": 1500,
+        "photo": "",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "분식",
+        "section_ja": "粉食（軽食）",
+        "name_ko": "쿨피스",
+        "name_ja": "クールピス（乳酸飲料）",
+        "price": 2000,
+        "photo": "",
+        "desc_ko": "",
+        "desc_ja": ""
+      }
+    ]
   }
 ]
