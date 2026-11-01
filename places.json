@@ -989,5 +989,23 @@
         "desc_ja": ""
       }
     ]
+  },
+  {
+    "id": "sasaroun",
+    "area_id": "dongseongno",
+    "category": "shop",
+    "name_ko": "사사로운",
+    "name_ja": "ササロウン（雑貨店）",
+    "desc_ko": "따뜻한 조명 아래 마스킹테이프, 엽서, 노트 같은 문구와 소품이 가득한 소품샵. 다꾸(다이어리 꾸미기) 좋아하면 구경할 게 많아요.",
+    "desc_ja": "あたたかい照明の店内に、マスキングテープやポストカード、ノートなどの文具・雑貨がずらりと並ぶお店。手帳デコが好きなら見どころたっぷりです。",
+    "hours_ja": "",
+    "hours_ko": "",
+    "naver_url": "https://map.naver.com/p/entry/place/1936123700",
+    "photos": [
+      "images/sasaroun/1-interior.jpg",
+      "images/sasaroun/2-tapes.jpg",
+      "images/sasaroun/3-notebooks.jpg"
+    ],
+    "menu": []
   }
 ]
