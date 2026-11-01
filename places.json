@@ -634,5 +634,69 @@
         "desc_ja": ""
       }
     ]
+  },
+  {
+    "id": "baekgeumdang",
+    "area_id": "dongdaegu",
+    "category": "cafe",
+    "name_ko": "백금당",
+    "name_ja": "白金堂（ペッククムダン）",
+    "desc_ko": "주문하면 바로 구워 주는 수플레 케이크로 유명한 디저트 카페. 레트로한 실내에서 빙수와 파르페도 즐길 수 있어요.",
+    "desc_ja": "注文を受けてから焼き上げるスフレケーキで人気のデザートカフェ。レトロな店内で、ピンスやパフェも楽しめます。",
+    "hours_ja": "",
+    "hours_ko": "",
+    "address_ko": "대구 동구 효신로 82",
+    "naver_url": "https://naver.me/5pwsnvqz",
+    "photos": [
+      "images/baekgeumdang/1-souffle.jpg",
+      "images/baekgeumdang/2-strawberry.jpg",
+      "images/baekgeumdang/3-interior.jpg"
+    ],
+    "menu": [
+      {
+        "section_ko": "수플레",
+        "section_ja": "スフレ",
+        "name_ko": "백금당 수플레 케이크",
+        "name_ja": "白金堂スフレケーキ",
+        "price": 15000,
+        "photo": "images/baekgeumdang/1-souffle.jpg",
+        "desc_ko": "주문 즉시 바로 구워 크림을 덮고, 제철 과일과 함께 내는 백금당 시그니처",
+        "desc_ja": "注文を受けてから焼き上げ、クリームをかけて旬のフルーツと一緒に出す、白金堂の看板メニュー",
+        "signature": true
+      },
+      {
+        "section_ko": "빙수",
+        "section_ja": "かき氷（ピンス）",
+        "name_ko": "생망고 빙수",
+        "name_ja": "生マンゴーのピンス",
+        "price": 24000,
+        "photo": "images/baekgeumdang/menu-mango.jpg",
+        "desc_ko": "진한 우유빙수 위에 생망고 하나를 통째로 올린 빙수",
+        "desc_ja": "濃厚なミルクかき氷に、生マンゴーをまるごと1個のせたピンス",
+        "signature": true
+      },
+      {
+        "section_ko": "빙수",
+        "section_ja": "かき氷（ピンス）",
+        "name_ko": "허니듀멜론 빙수",
+        "name_ja": "ハニーデューメロンのピンス",
+        "price": 22000,
+        "photo": "images/baekgeumdang/menu-melon.jpg",
+        "desc_ko": "당도 높은 허니듀 멜론을 올린 빙수",
+        "desc_ja": "甘いハニーデューメロンをのせたピンス",
+        "signature": true
+      },
+      {
+        "section_ko": "빙수",
+        "section_ja": "かき氷（ピンス）",
+        "name_ko": "우유빙수",
+        "name_ja": "ミルクピンス",
+        "price": 12000,
+        "photo": "images/baekgeumdang/menu-milk.jpg",
+        "desc_ko": "국산 팥과 인절미가 들어 있는 기본 눈꽃빙수",
+        "desc_ja": "国産のあずきときな粉餅（インジョルミ）が入った、シンプルなミルクかき氷",
+        "signature": true
+      }
+    ]
   }
 ]
