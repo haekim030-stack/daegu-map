@@ -387,13 +387,14 @@
     "desc_ja": "香村洞（ヒャンチョンドン）にある雑貨屋さん。レトロで雰囲気のある小物がたくさんあって、眺めているだけでも楽しいお店です。",
     "hours_ja": "",
     "hours_ko": "",
-    "naver_query": "물비늘 소품샵 향촌동",
     "photos": [
       "images/mulbineul/1-interior.jpg",
       "images/mulbineul/2-window.jpg",
       "images/mulbineul/3-lighters.jpg",
       "images/mulbineul/4-poster.jpg"
     ],
-    "menu": []
+    "menu": [],
+    "address_ko": "대구 중구 중앙대로 455-2 2층 1호",
+    "naver_url": "https://naver.me/FBMFVoPh"
   }
 ]
