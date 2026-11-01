@@ -480,5 +480,20 @@
         "desc_ja": "旬の牡蠣とゆで豚を一緒に味わう季節メニュー。NAVER上では現在販売一時停止中"
       }
     ]
+  },
+  {
+    "id": "sobe-bakery",
+    "area_id": "dongseongno",
+    "category": "cafe",
+    "name_ko": "소베",
+    "name_ja": "ソベ（ベーカリー）",
+    "desc_ko": "동성로 북쪽, 중앙대로 옆 골목에 있는 베이커리.",
+    "desc_ja": "東城路の北側、中央大路沿いの路地にあるベーカリー。",
+    "hours_ja": "",
+    "hours_ko": "",
+    "address_ko": "대구 중구 중앙대로79길 6 1층",
+    "naver_query": "소베 대구 중앙대로79길",
+    "photos": [],
+    "menu": []
   }
 ]
