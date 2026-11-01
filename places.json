@@ -1007,5 +1007,22 @@
       "images/sasaroun/3-notebooks.jpg"
     ],
     "menu": []
+  },
+  {
+    "id": "gulliver-makchang",
+    "area_id": "dongseongno",
+    "category": "restaurant",
+    "name_ko": "걸리버막창",
+    "name_ja": "ガリバー・マクチャン（ホルモン焼き）",
+    "desc_ko": "대구 명물 막창구이 집. 불판에 노릇하게 구운 막창을 양념장에 찍어 먹어요.",
+    "desc_ja": "大邱名物「マクチャン（豚ホルモン焼き）」のお店。鉄板でこんがり焼いたホルモンを、タレにつけていただきます。",
+    "hours_ja": "",
+    "hours_ko": "",
+    "naver_url": "https://naver.me/5T4ABPf4",
+    "photos": [
+      "images/gulliver/1-makchang.jpg",
+      "images/gulliver/2-grill.jpg"
+    ],
+    "menu": []
   }
 ]
