@@ -50,7 +50,7 @@
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink); font-family: var(--font);
   font-size: var(--fs-base); line-height: 1.5; -webkit-font-smoothing: antialiased; }
-body { overflow: hidden; }
+html, body { overflow: hidden; overscroll-behavior: none; }
 button { font: inherit; color: inherit; cursor: pointer; border: 0; background: none; padding: 0; }
 a { color: inherit; }
 [hidden] { display: none !important; }
@@ -60,7 +60,8 @@ a { color: inherit; }
   stroke-linecap: round; stroke-linejoin: round; display: block; }
 .ic-s { width: 16px; height: 16px; }
 
-#app { display: flex; flex-direction: column; height: 100vh; height: 100dvh; }
+/* 앱 전체를 화면에 고정 — 페이지 자체는 절대 스크롤되지 않음 (iOS 사파리 대응) */
+#app { position: fixed; inset: 0; display: flex; flex-direction: column; }
 
 /* ---------- 상단 ---------- */
 .topbar { display: flex; align-items: center; gap: var(--s2);
@@ -104,7 +105,7 @@ a { color: inherit; }
 .chip.on .n { color: rgba(255,255,255,.7); }
 
 /* ---------- 지도 ---------- */
-.map-wrap { position: relative; flex: 1; min-height: 0; }
+.map-wrap { position: relative; flex: 1; min-height: 0; overflow: hidden; }
 #map { position: absolute; inset: 0; overflow: hidden; isolation: isolate; border-radius: var(--r-l) var(--r-l) 0 0;
   background: radial-gradient(120% 90% at 50% 35%, var(--sea), var(--sea-2));
   touch-action: manipulation; user-select: none; -webkit-user-select: none; }
@@ -155,7 +156,8 @@ a { color: inherit; }
 /* ---------- 바텀시트 ---------- */
 .sheet { position: absolute; left: 0; right: 0; top: 0; bottom: 0; z-index: 850;
   display: flex; flex-direction: column; background: var(--bg); border-radius: var(--r-l) var(--r-l) 0 0; box-shadow: var(--e2);
-  transform: translateY(105%); transition: transform 320ms var(--ease); will-change: transform; }
+  transform: translateY(105%); transition: transform 320ms var(--ease), visibility 0s; will-change: transform; }
+.sheet:not(.open) { visibility: hidden; transition: transform 320ms var(--ease), visibility 0s 320ms; }
 /* 시트가 끝까지 올라가기 전에는 목록 대신 시트 자체가 움직임 (네이버지도 방식) */
 .sheet:not(.full) .sheet-list { overflow: hidden; }
 .sheet.full { border-radius: 0; }
