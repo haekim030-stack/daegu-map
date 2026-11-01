@@ -376,5 +376,24 @@
       "images/hyangchon/4-costume.jpg"
     ],
     "menu": []
+  },
+  {
+    "id": "mulbineul",
+    "area_id": "dongseongno",
+    "category": "shop",
+    "name_ko": "물비늘",
+    "name_ja": "ムルビヌル（雑貨店）",
+    "desc_ko": "향촌동에 있는 소품샵. 레트로하고 감성 있는 소품이 많아서 구경하는 재미가 있어요.",
+    "desc_ja": "香村洞（ヒャンチョンドン）にある雑貨屋さん。レトロで雰囲気のある小物がたくさんあって、眺めているだけでも楽しいお店です。",
+    "hours_ja": "",
+    "hours_ko": "",
+    "naver_query": "물비늘 소품샵 향촌동",
+    "photos": [
+      "images/mulbineul/1-interior.jpg",
+      "images/mulbineul/2-window.jpg",
+      "images/mulbineul/3-lighters.jpg",
+      "images/mulbineul/4-poster.jpg"
+    ],
+    "menu": []
   }
 ]
