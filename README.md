@@ -45,7 +45,7 @@ python3 -m http.server 8000
 | `desc_*`, `hours_*` | 소개, 영업시간 (`\n`으로 줄바꿈 가능) |
 | `lat`, `lng` | (선택) 구글맵 버튼이 이 좌표로 열림. 없으면 주소·이름으로 검색. 지도 핀과는 무관 |
 | `photos` | 사진 경로 배열. 비우면 카테고리 아이콘 표시 |
-| `menu` | `{ section_ko, section_ja, name_ko, name_ja, price, photo, desc_ko, desc_ja, signature }` 배열. 같은 `section`끼리 묶여 소제목이 붙고, 사진 있는 메뉴는 2열 카드, 사진 없는 메뉴(음료·세트)는 목록으로 나옴. `signature: true`면 "대표" 표시. 비우면 메뉴 섹션 숨김 |
+| `menu` | `{ section_ko, section_ja, name_ko, name_ja, price, photo, desc_ko, desc_ja, signature }` 배열. 같은 `section`끼리 묶여 소제목이 붙고, 사진 있는 메뉴는 2열 카드, 사진 없는 메뉴(음료·세트)는 목록으로 나옴. `signature: true`면 "대표" 표시. `price`는 숫자(15000) 또는 `"40,000~"`처럼 쓰면 "40,000원~"으로 표시. 비우면 메뉴 섹션 숨김 |
 | `address_ko` | (선택) 한국어 주소. 상세 화면에 표시되고, 좌표가 없을 때 구글맵 검색에도 쓰임 |
 | `naver_url` | (선택) 네이버 공유 링크(`https://naver.me/...`). 있으면 [네이버지도] 버튼이 이 링크로 바로 열림 |
 | `naver_query` | (선택) 네이버지도 검색어. 체인점처럼 이름만으로 헷갈릴 때 `"OO카페 동성로점"` 식으로 |

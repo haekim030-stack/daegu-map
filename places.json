@@ -1154,5 +1154,166 @@
         "desc_ja": ""
       }
     ]
+  },
+  {
+    "id": "nokyang-hyangchon",
+    "area_id": "dongseongno",
+    "category": "restaurant",
+    "name_ko": "녹양 향촌점",
+    "name_ja": "ノギャン 香村店",
+    "desc_ko": "향촌동의 생고기(뭉티기) 집. 한우 생고기와 오드래기, 등골 같은 특수부위를 날로 즐기고, 전골이나 석쇠불고기도 있어요. 물은 셀프예요.",
+    "desc_ja": "香村洞（ヒャンチョンドン）にある生肉（ムンティギ）のお店。韓牛の生肉や珍しい部位を生でいただけるほか、鍋や網焼きプルコギもあります。お水はセルフサービスです。",
+    "hours_ja": "",
+    "hours_ko": "",
+    "naver_url": "https://naver.me/xHgIsgh8",
+    "photos": [
+      "images/nokyang/1-saenggogi.jpg",
+      "images/nokyang/2-table.jpg",
+      "images/nokyang/3-menu-board.jpg"
+    ],
+    "menu": [
+      {
+        "section_ko": "국내산 한우·육우",
+        "section_ja": "国産牛（韓牛・肉牛）",
+        "name_ko": "생고기 (뭉티기)",
+        "name_ja": "生肉（ムンティギ）",
+        "price": "50,000~",
+        "photo": "images/nokyang/1-saenggogi.jpg",
+        "desc_ko": "대 60,000 / 중 50,000",
+        "desc_ja": "大 60,000 / 中 50,000ウォン",
+        "signature": true
+      },
+      {
+        "section_ko": "국내산 한우·육우",
+        "section_ja": "国産牛（韓牛・肉牛）",
+        "name_ko": "양지머리",
+        "name_ja": "ヤンジモリ（牛ブリスケット）",
+        "price": "40,000~",
+        "photo": "",
+        "desc_ko": "대 60,000 / 중 50,000 / 소 40,000",
+        "desc_ja": "大 60,000 / 中 50,000 / 小 40,000ウォン"
+      },
+      {
+        "section_ko": "국내산 한우·육우",
+        "section_ja": "国産牛（韓牛・肉牛）",
+        "name_ko": "오드래기",
+        "name_ja": "オドゥレギ（牛の大動脈）",
+        "price": "40,000~",
+        "photo": "",
+        "desc_ko": "대 60,000 / 중 50,000 / 소 40,000",
+        "desc_ja": "大 60,000 / 中 50,000 / 小 40,000ウォン"
+      },
+      {
+        "section_ko": "국내산 한우·육우",
+        "section_ja": "国産牛（韓牛・肉牛）",
+        "name_ko": "등골",
+        "name_ja": "トゥンゴル（牛の脊髄）",
+        "price": "40,000~",
+        "photo": "",
+        "desc_ko": "대 60,000 / 중 50,000 / 소 40,000",
+        "desc_ja": "大 60,000 / 中 50,000 / 小 40,000ウォン"
+      },
+      {
+        "section_ko": "국내산 한우·육우",
+        "section_ja": "国産牛（韓牛・肉牛）",
+        "name_ko": "석쇠불고기",
+        "name_ja": "網焼きプルコギ",
+        "price": "40,000~",
+        "photo": "",
+        "desc_ko": "대 60,000 / 중 50,000 / 소 40,000",
+        "desc_ja": "大 60,000 / 中 50,000 / 小 40,000ウォン"
+      },
+      {
+        "section_ko": "국내산 한우·육우",
+        "section_ja": "国産牛（韓牛・肉牛）",
+        "name_ko": "곱창전골",
+        "name_ja": "コプチャン鍋（ホルモン鍋）",
+        "price": "40,000~",
+        "photo": "",
+        "desc_ko": "대 60,000 / 중 50,000 / 소 40,000",
+        "desc_ja": "大 60,000 / 中 50,000 / 小 40,000ウォン"
+      },
+      {
+        "section_ko": "국내산 한우·육우",
+        "section_ja": "国産牛（韓牛・肉牛）",
+        "name_ko": "쇠고기전골",
+        "name_ja": "牛肉鍋",
+        "price": "40,000~",
+        "photo": "",
+        "desc_ko": "대 60,000 / 중 50,000 / 소 40,000",
+        "desc_ja": "大 60,000 / 中 50,000 / 小 40,000ウォン"
+      },
+      {
+        "section_ko": "국내산 한우·육우",
+        "section_ja": "国産牛（韓牛・肉牛）",
+        "name_ko": "간천엽",
+        "name_ja": "レバーとセンマイ",
+        "price": 30000,
+        "photo": "",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "세트·식사",
+        "section_ja": "セット・お食事",
+        "name_ko": "생모듬 (생고기·육회·등골)",
+        "name_ja": "生盛り合わせ（生肉・ユッケ・脊髄）",
+        "price": 80000,
+        "photo": "",
+        "desc_ko": "",
+        "desc_ja": "",
+        "signature": true
+      },
+      {
+        "section_ko": "세트·식사",
+        "section_ja": "セット・お食事",
+        "name_ko": "생고기 + 오드래기",
+        "name_ja": "生肉＋オドゥレギ",
+        "price": 70000,
+        "photo": "",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "세트·식사",
+        "section_ja": "セット・お食事",
+        "name_ko": "육회비빔밥",
+        "name_ja": "ユッケビビンバ",
+        "price": 15000,
+        "photo": "",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "주류",
+        "section_ja": "お酒",
+        "name_ko": "참소주 / 제로투 (소주)",
+        "name_ja": "焼酎（チャムソジュ／ゼロツー）",
+        "price": 5000,
+        "photo": "",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "주류",
+        "section_ja": "お酒",
+        "name_ko": "맥주",
+        "name_ja": "ビール",
+        "price": 5000,
+        "photo": "",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "주류",
+        "section_ja": "お酒",
+        "name_ko": "막걸리",
+        "name_ja": "マッコリ",
+        "price": 5000,
+        "photo": "",
+        "desc_ko": "",
+        "desc_ja": ""
+      }
+    ]
   }
 ]

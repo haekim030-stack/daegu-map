@@ -556,7 +556,10 @@ a { color: inherit; }
   function formatPrice(v) {
     if (v === null || v === undefined || v === '') return '';
     const n = toNum(v);
-    return Number.isFinite(n) ? t('price')(n.toLocaleString('ja-JP')) : String(v);
+    if (Number.isFinite(n)) return t('price')(n.toLocaleString('ja-JP'));
+    const from = String(v).match(/^\s*([\d,]+)\s*~\s*$/);              // "40,000~" → 40,000ウォン〜
+    if (from) return t('price')(toNum(from[1].replace(/,/g, '')).toLocaleString('ja-JP')) + '〜';
+    return String(v);
   }
   const placeholder = cat => `<div class="ph">${ic(CATS[cat] || 'play')}</div>`;
   const imgTag = (src, cat, alt) =>
