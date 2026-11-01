@@ -107,8 +107,7 @@ a { color: inherit; }
 .map-wrap { position: relative; flex: 1; min-height: 0; }
 #map { position: absolute; inset: 0; overflow: hidden; isolation: isolate; border-radius: var(--r-l) var(--r-l) 0 0;
   background: radial-gradient(120% 90% at 50% 35%, var(--sea), var(--sea-2));
-  touch-action: none; user-select: none; -webkit-user-select: none; cursor: grab; }
-#map:active { cursor: grabbing; }
+  touch-action: manipulation; user-select: none; -webkit-user-select: none; }
 #mapSvg, #leaders { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 #leaders { pointer-events: none; }
 #areaLabels, #pins { position: absolute; inset: 0; pointer-events: none; }
@@ -402,7 +401,7 @@ a { color: inherit; }
       title: '大邱おでかけマップ',
       sub: '11月16日・大邱さんぽ',
       notice: '韓国ではGoogleマップの経路案内がうまく使えないので、NAVER Map（ネイバー地図）アプリがおすすめです。',
-      hint: 'ピンをタップ。地図は指で動かせます',
+      hint: 'ピンをタップして、エリアのお店を見てみよう',
       all: '全体マップ',
       back: '全体マップ',
       cat_all: 'すべて', cat_restaurant: 'ごはん', cat_cafe: 'カフェ', cat_activity: '遊ぶ・体験', cat_shop: 'ショップ',
@@ -429,7 +428,7 @@ a { color: inherit; }
       title: '대구 둘러보기 지도',
       sub: '11월 16일 · 대구 나들이',
       notice: '한국에서는 구글맵 길찾기가 잘 안 되니 네이버지도 앱을 추천합니다.',
-      hint: '핀을 누르거나, 지도를 움직여 보세요',
+      hint: '핀을 눌러 구역별 가게를 둘러보세요',
       all: '전체 지도',
       back: '전체 지도',
       cat_all: '전체', cat_restaurant: '식당', cat_cafe: '카페', cat_activity: '액티비티', cat_shop: '쇼핑',
@@ -575,7 +574,7 @@ a { color: inherit; }
   let SHAPE = null;                             // daegu-shape.json
   let W = 0, H = 0;                             // 지도 영역 크기(px)
   const V = { x: 0, y: 0, w: 1, h: 1 };         // 지금 보이는 영역(SVG 좌표)
-  const areaEls = {};                           // id -> { pin, label, leader, ax, ay, zoomUnits, off }
+  const areaEls = {};                           // id -> { pin, label, leader, ax, ay, off }
   let shadowG, districtTexts = [], animId = 0;
 
   function svgEl(name, attrs, parent) {
@@ -640,8 +639,7 @@ a { color: inherit; }
       label.addEventListener('click', () => selectArea(a.id));
       labelsEl.appendChild(label);
 
-      const r = toNum(a.radius) > 0 ? toNum(a.radius) : 2500;   // 확대했을 때 보이는 반경(m)
-      areaEls[a.id] = { pin, label, leader, ax, ay, zoomUnits: metersToUnits(r), off: { dx: 0, dy: -50 } };
+      areaEls[a.id] = { pin, label, leader, ax, ay, off: { dx: 0, dy: -50 } };
     });
   }
 
@@ -781,80 +779,6 @@ a { color: inherit; }
     applyView();
   }
 
-  /* ---------- 손가락으로 지도 움직이기 / 확대·축소 ---------- */
-  let userMoved = false;                        // 사용자가 지도를 직접 움직였으면 자동으로 다시 맞추지 않음
-  function clampCenter() {
-    const [x0, y0, x1, y1] = SHAPE.bounds;
-    const cx = Math.max(x0, Math.min(x1, V.x + V.w / 2)), cy = Math.max(y0, Math.min(y1, V.y + V.h / 2));
-    V.x = cx - V.w / 2; V.y = cy - V.h / 2;
-  }
-  function zoomAt(f, px, py) {                  // f<1 확대, f>1 축소, (px,py)=손가락 위치
-    const maxW = overviewView().w * 1.6, minW = metersToUnits(1200);
-    const nw = Math.max(minW, Math.min(maxW, V.w * f));
-    const ux = V.x + px / W * V.w, uy = V.y + py / H * V.h;
-    V.w = nw; V.h = nw * H / W;
-    V.x = ux - px / W * V.w; V.y = uy - py / H * V.h;
-  }
-  (function mapGestures() {
-    const ptrs = new Map();
-    let g = null, suppressClick = false, wheelTimer = 0;
-    const local = (x, y) => { const r = mapEl.getBoundingClientRect(); return [x - r.left, y - r.top]; };
-    mapEl.addEventListener('pointerdown', e => {
-      if (!SHAPE || (e.pointerType === 'mouse' && e.button !== 0)) return;
-      ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY });
-      cancelAnimationFrame(animId);
-      if (!g) g = { moved: false, x0: e.clientX, y0: e.clientY, pinch: null };
-      if (ptrs.size === 2) g.pinch = null;
-    });
-    window.addEventListener('pointermove', e => {
-      if (!g || !ptrs.has(e.pointerId)) return;
-      const prev = ptrs.get(e.pointerId), cur = { x: e.clientX, y: e.clientY };
-      ptrs.set(e.pointerId, cur);
-      if (!g.moved && ptrs.size < 2 && Math.hypot(cur.x - g.x0, cur.y - g.y0) < 6) return;
-      g.moved = true; userMoved = true;
-      if (ptrs.size === 1) {
-        const sc = V.w / W;
-        V.x -= (cur.x - prev.x) * sc; V.y -= (cur.y - prev.y) * sc;
-      } else {
-        const [a, b] = [...ptrs.values()];
-        const d = Math.hypot(a.x - b.x, a.y - b.y), mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
-        if (g.pinch && d > 0) {
-          const [lx, ly] = local(mx, my);
-          zoomAt(g.pinch.d / d, lx, ly);
-          const sc = V.w / W;
-          V.x -= (mx - g.pinch.mx) * sc; V.y -= (my - g.pinch.my) * sc;
-        }
-        g.pinch = { d, mx, my };
-      }
-      clampCenter();
-      applyView();
-    });
-    const up = e => {
-      if (!ptrs.has(e.pointerId)) return;
-      ptrs.delete(e.pointerId);
-      if (ptrs.size === 0) {
-        if (g && g.moved) { suppressClick = true; setTimeout(() => { suppressClick = false; }, 0); relayout(); }
-        g = null;
-      } else if (g) g.pinch = null;
-    };
-    window.addEventListener('pointerup', up);
-    window.addEventListener('pointercancel', up);
-    // 끌다가 손을 뗀 건 핀 탭으로 치지 않음
-    mapEl.addEventListener('click', e => { if (suppressClick) { e.stopPropagation(); e.preventDefault(); } }, true);
-    mapEl.addEventListener('wheel', e => {
-      if (!SHAPE) return;
-      e.preventDefault();
-      cancelAnimationFrame(animId);
-      const [lx, ly] = local(e.clientX, e.clientY);
-      zoomAt(Math.exp(e.deltaY * 0.0015), lx, ly);
-      userMoved = true;
-      clampCenter();
-      applyView();
-      clearTimeout(wheelTimer);
-      wheelTimer = setTimeout(relayout, 150);
-    }, { passive: false });
-  })();
-
   function overviewBounds() {
     let [x0, y0, x1, y1] = SHAPE.bounds;
     const m = metersToUnits(300);
@@ -872,26 +796,21 @@ a { color: inherit; }
     goTo(v, animate);
   }
 
+  /* 구역을 고르면 크게 확대하지 않고, 모든 핀이 다 보이는 범위를 시트 위 공간에 맞춤 (지도는 고정) */
   function fitArea(animate = true) {
-    const a = areaEls[S.currentArea];
-    const wide = isWide();
-    const bottom = sheetCover(), left = wide ? $('#sheet').offsetWidth + 32 : 0;
-    if (!a) { goTo(viewFor(overviewBounds(), { pad: 14, bottom, left }), animate); return; }
-    const R = a.zoomUnits;
-    goTo(viewFor([a.ax - R, a.ay - R, a.ax + R, a.ay + R], { pad: 0, bottom, left, top: 24 }), animate);
+    const left = isWide() ? $('#sheet').offsetWidth + 32 : 0;
+    const m = metersToUnits(1500);
+    let b = null;
+    Object.values(areaEls).forEach(a => {
+      b = b ? [Math.min(b[0], a.ax - m), Math.min(b[1], a.ay - m), Math.max(b[2], a.ax + m), Math.max(b[3], a.ay + m)]
+            : [a.ax - m, a.ay - m, a.ax + m, a.ay + m];
+    });
+    goTo(viewFor(b || overviewBounds(), { pad: 14, bottom: sheetCover(), left, top: 44 }), animate);
   }
 
   function onResize() {
     if (!SHAPE) return;
     measure();
-    if (userMoved) {                            // 사용자가 움직인 시점은 유지하고 화면 비율만 맞춤
-      const cx = V.x + V.w / 2, cy = V.y + V.h / 2;
-      V.h = V.w * H / W; V.x = cx - V.w / 2; V.y = cy - V.h / 2;
-      layoutLabels(overviewView());
-      if (S.currentArea) setSnap(snap, false);
-      applyView();
-      return;
-    }
     if (S.currentArea) { layoutLabels(overviewView()); setSnap(snap, false); fitArea(false); } else fitOverview(false);
   }
 
@@ -914,7 +833,6 @@ a { color: inherit; }
     if (!b) return;
     if (b.dataset.area) selectArea(b.dataset.area);
     else if (S.currentArea) closeTop();
-    else { userMoved = false; fitOverview(true); }     // 전체 화면에서 누르면 원래 위치로
   });
 
   function cardHTML(p, opts) {
@@ -991,7 +909,6 @@ a { color: inherit; }
     if (!S.areaById[id]) return;
     if (S.currentArea === id) { setSnap('half'); return; }
     const fromOverview = !S.currentArea;
-    userMoved = false;
     S.currentArea = id;
     S.filter = 'all';
     sheetEl.classList.add('open');
@@ -1005,7 +922,6 @@ a { color: inherit; }
   }
 
   function showOverview() {
-    userMoved = false;
     S.currentArea = null;
     S.filter = 'all';
     sheetEl.classList.remove('open');
@@ -1044,7 +960,7 @@ a { color: inherit; }
     if (isWide()) { sheetEl.style.transition = animate ? '' : 'none'; sheetEl.style.transform = 'none'; return; }
     if (name !== 'full') listEl.scrollTop = 0;
     setSheetY(snapY(name), animate);
-    if (S.currentArea && name !== 'full' && !userMoved) requestAnimationFrame(() => fitArea(animate));
+    if (S.currentArea && name !== 'full' ) requestAnimationFrame(() => fitArea(animate));
   }
   function hideSheet() {
     sheetEl.classList.remove('full');
