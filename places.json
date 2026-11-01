@@ -495,5 +495,76 @@
     "naver_query": "소베 대구 중앙대로79길",
     "photos": [],
     "menu": []
+  },
+  {
+    "id": "cafe-lucid",
+    "area_id": "dongseongno",
+    "category": "cafe",
+    "name_ko": "카페 루시드",
+    "name_ja": "カフェ ルシード",
+    "desc_ko": "푸딩을 통째로 올린 푸딩빙수로 유명한 디저트 카페. 빙수는 매장에 와서 직접 주문해야 하고, 대표 푸딩빙수는 하루 한정 수량이에요.",
+    "desc_ja": "プリンを丸ごとのせた「プリンピンス」で人気のデザートカフェ。ピンスは店頭での注文のみで、看板のプリンピンスは1日限定数です。",
+    "hours_ja": "",
+    "hours_ko": "",
+    "address_ko": "대구 중구 동성로4길 94",
+    "naver_url": "https://naver.me/I5wxH1Wi",
+    "photos": [
+      "images/lucid/pudding.jpg",
+      "images/lucid/chocolat-pudding-big.jpg",
+      "images/lucid/tiramisu-pudding.jpg"
+    ],
+    "menu": [
+      {
+        "section_ko": "빙수",
+        "section_ja": "かき氷（ピンス）",
+        "name_ko": "푸딩빙수",
+        "name_ja": "プリンピンス",
+        "price": 19500,
+        "photo": "images/lucid/pudding.jpg",
+        "desc_ko": "진한 커스터드 크림, 카라멜 푸딩, 직접 졸인 카라멜을 뿌린 대표 빙수. 하루 한정 수량",
+        "desc_ja": "濃厚なカスタードクリームにカラメルプリンをのせ、自家製キャラメルをかけた看板ピンス。1日限定数",
+        "signature": true
+      },
+      {
+        "section_ko": "빙수",
+        "section_ja": "かき氷（ピンス）",
+        "name_ko": "쇼콜라 푸딩빙수",
+        "name_ja": "ショコラ・プリンピンス",
+        "price": 21500,
+        "photo": "images/lucid/chocolat-pudding.jpg",
+        "desc_ko": "쇼콜라 푸딩에 진한 초콜릿 크림과 초코 소스를 올린 빙수",
+        "desc_ja": "ショコラプリンに濃いチョコクリームとチョコソースを合わせたピンス"
+      },
+      {
+        "section_ko": "빙수",
+        "section_ja": "かき氷（ピンス）",
+        "name_ko": "티라미수 푸딩빙수",
+        "name_ja": "ティラミス・プリンピンス",
+        "price": 21000,
+        "photo": "images/lucid/tiramisu-pudding.jpg",
+        "desc_ko": "카라멜 푸딩과 커피맛, 티라미수 소스를 더한 빙수",
+        "desc_ja": "カラメルプリンにコーヒー風味とティラミスソースを合わせたピンス"
+      },
+      {
+        "section_ko": "빙수",
+        "section_ja": "かき氷（ピンス）",
+        "name_ko": "녹차빙수",
+        "name_ja": "抹茶ピンス",
+        "price": 19000,
+        "photo": "images/lucid/matcha.jpg",
+        "desc_ko": "진한 말차 가루에 통팥과 구운 견과류를 곁들인 빙수",
+        "desc_ja": "濃い抹茶パウダーに、つぶあんとローストナッツを添えたピンス"
+      },
+      {
+        "section_ko": "빙수",
+        "section_ja": "かき氷（ピンス）",
+        "name_ko": "녹차숲빙수",
+        "name_ja": "抹茶の森ピンス",
+        "price": 25000,
+        "photo": "images/lucid/matcha-forest.jpg",
+        "desc_ko": "",
+        "desc_ja": ""
+      }
+    ]
   }
 ]

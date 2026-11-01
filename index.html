@@ -293,6 +293,17 @@ a { color: inherit; }
 .lightbox img { max-width: 100%; max-height: 100%; object-fit: contain; }
 .lightbox .icon-btn { position: absolute; top: calc(var(--s3) + env(safe-area-inset-top)); right: var(--s3); background: rgba(255,255,255,.14); color: #fff; box-shadow: none; }
 
+.update-bar { position: fixed; left: 50%; top: calc(var(--s3) + env(safe-area-inset-top)); z-index: 2500;
+  transform: translate(-50%, -140%); transition: transform 320ms var(--ease);
+  display: flex; align-items: center; gap: var(--s3); width: max-content; max-width: calc(100% - 24px);
+  padding: var(--s2) var(--s2) var(--s2) var(--s4); border-radius: var(--r-pill); background: var(--ink); color: #fff;
+  box-shadow: var(--e2); font-size: var(--fs-m); font-weight: 600; }
+.update-bar.show { transform: translate(-50%, 0); }
+.update-bar .ic { width: 18px; height: 18px; flex: none; }
+.update-bar button.go { height: 34px; padding: 0 var(--s3); border-radius: var(--r-pill); background: #fff; color: var(--ink); font-size: var(--fs-s); font-weight: 700; white-space: nowrap; }
+.update-bar button.x { width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; color: rgba(255,255,255,.7); }
+.update-bar button.x .ic { width: 16px; height: 16px; }
+
 .toast { position: fixed; left: 50%; bottom: calc(96px + env(safe-area-inset-bottom)); z-index: 3000;
   transform: translate(-50%, 12px); opacity: 0; pointer-events: none; width: max-content; max-width: calc(100% - 32px);
   padding: var(--s3) var(--s4); border-radius: var(--r-m); background: var(--ink); color: #fff; box-shadow: var(--e2);
@@ -390,6 +401,12 @@ a { color: inherit; }
   <button class="icon-btn" type="button" data-close aria-label="close"><span data-icon="close"></span></button>
 </div>
 
+<div class="update-bar" id="updateBar" role="status" aria-live="polite">
+  <span data-icon="spark"></span><span id="updateMsg"></span>
+  <button class="go" type="button" id="updateGo" data-i18n="update_btn"></button>
+  <button class="x" type="button" id="updateClose" aria-label="close"><span data-icon="close"></span></button>
+</div>
+
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
@@ -426,6 +443,9 @@ a { color: inherit; }
       other: 'その他',
       price: v => `${v}ウォン`,
       load_err: 'データを読み込めませんでした。',
+      update_new: n => `新しい場所が${n}件追加されました`,
+      update_changed: '内容が更新されました',
+      update_btn: '更新する',
     },
     ko: {
       title: '대구 둘러보기 지도',
@@ -453,6 +473,9 @@ a { color: inherit; }
       other: '기타',
       price: v => `${v}원`,
       load_err: '데이터를 불러오지 못했어요.',
+      update_new: n => `새 장소가 ${n}곳 추가됐어요`,
+      update_changed: '내용이 업데이트됐어요',
+      update_btn: '새로고침',
     },
   };
 
@@ -467,6 +490,7 @@ a { color: inherit; }
     cafe: '<path d="M4 9h12v4.5A5.5 5.5 0 0 1 10.5 19h-1A5.5 5.5 0 0 1 4 13.5V9zM16 10.5h1.5a2.5 2.5 0 0 1 0 5H16M8 3.5c-.7.8-.7 1.7 0 2.5M12 3.5c-.7.8-.7 1.7 0 2.5"/>',
     play: '<path d="M12 3.5l2.4 5.1 5.6.7-4.1 3.9 1 5.5L12 16.1l-4.9 2.6 1-5.5-4.1-3.9 5.6-.7z"/>',
     bag: '<path d="M5 8.5h14l-1.1 11.5H6.1L5 8.5z"/><path d="M9 8.5V7a3 3 0 0 1 6 0v1.5"/>',
+    spark: '<path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/>',
     grid: '<path d="M4.5 4.5h6v6h-6zM13.5 4.5h6v6h-6zM4.5 13.5h6v6h-6zM13.5 13.5h6v6h-6z"/>',
     map: '<path d="M9 4.5L4 6.5v13l5-2 6 2 5-2v-13l-5 2-6-2zM9 4.5v13M15 6.5v13"/>',
     pin: '<path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/>',
@@ -1372,10 +1396,40 @@ a { color: inherit; }
   /* =========================================================
    * 데이터 불러오기 + 검증
    * ========================================================= */
-  async function loadJSON(url) {
-    const res = await fetch(url, { cache: 'no-cache' });
+  async function loadText(url, bust) {
+    const res = await fetch(bust ? `${url}?t=${Date.now()}` : url, { cache: 'no-cache' });
     if (!res.ok) throw new Error(`${url}: HTTP ${res.status}`);
-    return res.json();
+    return res.text();
+  }
+
+  /* =========================================================
+   * 업데이트 알림: 보는 도중에 json이 바뀌면 "새로고침" 안내
+   * ========================================================= */
+  let baseline = '', dismissedSig = '', updateTimer = 0;
+  async function checkUpdate() {
+    if (document.hidden || !baseline) return;
+    try {
+      const [a, p] = await Promise.all([loadText('areas.json', true), loadText('places.json', true)]);
+      const sig = a + '\n' + p;
+      if (sig === baseline || sig === dismissedSig) return;
+      let added = 0;
+      try { added = JSON.parse(p).filter(x => x && x.id && !S.placeById[x.id]).length; } catch (e) { return; }  // 저장 중인 깨진 json은 무시
+      try { JSON.parse(a); } catch (e) { return; }
+      $('#updateMsg').textContent = added ? t('update_new')(added) : t('update_changed');
+      $('#updateBar').dataset.sig = sig;
+      $('#updateBar').classList.add('show');
+    } catch (e) { /* 오프라인 등은 조용히 넘김 */ }
+  }
+  function startUpdateWatch() {
+    clearInterval(updateTimer);
+    updateTimer = setInterval(checkUpdate, 60 * 1000);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) checkUpdate(); });
+    window.addEventListener('focus', checkUpdate);
+    $('#updateGo').addEventListener('click', () => location.reload());
+    $('#updateClose').addEventListener('click', () => {
+      dismissedSig = $('#updateBar').dataset.sig || '';
+      $('#updateBar').classList.remove('show');
+    });
   }
 
   function prepare(areas, places) {
@@ -1412,9 +1466,10 @@ a { color: inherit; }
 
     try { history.replaceState(null, ''); } catch (e) {}
     try {
-      const [areas, places, shape] = await Promise.all([loadJSON('areas.json'), loadJSON('places.json'), loadJSON('daegu-shape.json')]);
-      SHAPE = shape;
-      prepare(areas, places);
+      const [aText, pText, sText] = await Promise.all([loadText('areas.json', true), loadText('places.json', true), loadText('daegu-shape.json')]);
+      baseline = aText + '\n' + pText;
+      SHAPE = JSON.parse(sText);
+      prepare(JSON.parse(aText), JSON.parse(pText));
     } catch (err) {
       console.error(err);
       const box = document.createElement('div');
@@ -1433,6 +1488,7 @@ a { color: inherit; }
     $('#favCount').textContent = favPlaces().length;
     styleAreas();
     fitOverview(false);
+    startUpdateWatch();
     if (window.ResizeObserver) new ResizeObserver(() => requestAnimationFrame(onResize)).observe(mapEl);
     else window.addEventListener('resize', onResize);
   }
