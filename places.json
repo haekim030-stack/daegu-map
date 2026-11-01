@@ -485,16 +485,84 @@
     "id": "sobe-bakery",
     "area_id": "dongseongno",
     "category": "cafe",
-    "name_ko": "소베",
-    "name_ja": "ソベ（ベーカリー）",
-    "desc_ko": "동성로 북쪽, 중앙대로 옆 골목에 있는 베이커리.",
-    "desc_ja": "東城路の北側、中央大路沿いの路地にあるベーカリー。",
+    "name_ko": "소베 (SAUVÉ)",
+    "name_ja": "ソベ（SAUVÉ）ベーカリー",
+    "desc_ko": "동성로 북쪽, 초록 간판이 눈에 띄는 베이커리. 소금빵과 명란바게트가 인기예요. 블로그 후기 기준으로 명란바게트는 오전 11시쯤 나온다고 해요.",
+    "desc_ja": "東城路の北側にある、緑の看板が目印のベーカリー。塩パンと明太子バゲットが人気です。ブログのレビューによると、明太子バゲットは午前11時ごろに焼き上がるそう。",
     "hours_ja": "",
     "hours_ko": "",
     "address_ko": "대구 중구 중앙대로79길 6 1층",
-    "naver_query": "소베 대구 중앙대로79길",
-    "photos": [],
-    "menu": []
+    "photos": [
+      "images/sobe/1-storefront.jpg",
+      "images/sobe/2-salt-bread.jpg",
+      "images/sobe/3-myeongran.jpg",
+      "images/sobe/4-shelf.jpg"
+    ],
+    "menu": [
+      {
+        "section_ko": "빵",
+        "section_ja": "パン",
+        "name_ko": "명란바게트",
+        "name_ja": "明太子バゲット",
+        "price": 5000,
+        "photo": "images/sobe/3-myeongran.jpg",
+        "desc_ko": "",
+        "desc_ja": "",
+        "signature": true
+      },
+      {
+        "section_ko": "빵",
+        "section_ja": "パン",
+        "name_ko": "소금빵",
+        "name_ja": "塩パン",
+        "price": "",
+        "photo": "images/sobe/2-salt-bread.jpg",
+        "desc_ko": "",
+        "desc_ja": "",
+        "signature": true
+      },
+      {
+        "section_ko": "빵",
+        "section_ja": "パン",
+        "name_ko": "명란소금빵",
+        "name_ja": "明太子塩パン",
+        "price": "",
+        "photo": "",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "빵",
+        "section_ja": "パン",
+        "name_ko": "모닝빵",
+        "name_ja": "モーニングロール",
+        "price": 3500,
+        "photo": "",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "빵",
+        "section_ja": "パン",
+        "name_ko": "치즈모닝빵",
+        "name_ja": "チーズモーニングロール",
+        "price": 5000,
+        "photo": "",
+        "desc_ko": "",
+        "desc_ja": ""
+      },
+      {
+        "section_ko": "빵",
+        "section_ja": "パン",
+        "name_ko": "맘모스빵",
+        "name_ja": "マンモスパン",
+        "price": 6500,
+        "photo": "",
+        "desc_ko": "",
+        "desc_ja": ""
+      }
+    ],
+    "naver_url": "https://naver.me/551EYeq5"
   },
   {
     "id": "cafe-lucid",
