@@ -1520,5 +1520,22 @@
       "images/thehyundai/3-sculpture.jpg"
     ],
     "menu": []
+  },
+  {
+    "id": "8seconds-dongseongno",
+    "area_id": "dongseongno",
+    "category": "shop",
+    "name_ko": "에잇세컨즈 대구동성로 (8seconds)",
+    "name_ja": "エイトセカンズ（8seconds）大邱 東城路店",
+    "desc_ko": "삼성물산의 SPA 브랜드 에잇세컨즈 매장. 트렌디한 옷을 부담 없는 가격에 둘러볼 수 있어요.",
+    "desc_ja": "韓国のファストファッションブランド「8seconds（エイトセカンズ）」のお店。トレンドの服を手ごろな値段で見て回れます。",
+    "hours_ja": "",
+    "hours_ko": "",
+    "naver_url": "https://naver.me/5JpU11sr",
+    "photos": [
+      "images/8seconds/1-storefront.jpg",
+      "images/8seconds/2-floor.jpg"
+    ],
+    "menu": []
   }
 ]
