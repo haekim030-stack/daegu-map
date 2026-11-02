@@ -1447,5 +1447,21 @@
       "images/oliveyoung/1-storefront.jpg"
     ],
     "menu": []
+  },
+  {
+    "id": "mixxo-dongseongno",
+    "area_id": "dongseongno",
+    "category": "shop",
+    "name_ko": "미쏘 동성로 플래그십스토어 (MIXXO)",
+    "name_ja": "ミッソ（MIXXO）東城路 フラッグシップストア",
+    "desc_ko": "이랜드의 여성 패션 브랜드 미쏘의 동성로 대형 매장. 2026년 3월에 새로 열었어요.",
+    "desc_ja": "韓国の女性向けファッションブランド「MIXXO（ミッソ）」の東城路にある大型店。2026年3月にオープンしたばかりです。",
+    "hours_ja": "",
+    "hours_ko": "",
+    "naver_url": "https://naver.me/5PWaTzzd",
+    "photos": [
+      "images/mixxo/1-storefront.jpg"
+    ],
+    "menu": []
   }
 ]
