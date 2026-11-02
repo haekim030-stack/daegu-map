@@ -1463,5 +1463,25 @@
       "images/mixxo/1-storefront.jpg"
     ],
     "menu": []
+  },
+  {
+    "id": "topten-dongseongno",
+    "area_id": "dongseongno",
+    "category": "shop",
+    "name_ko": "탑텐 대구 동성로점 (TOPTEN10)",
+    "name_ja": "トップテン（TOPTEN10）大邱 東城路店",
+    "desc_ko": "한국 SPA 브랜드 탑텐의 대형 매장. 2026년 10월 23일에 새로 열었어요. 니트, 맨투맨 같은 기본 옷을 부담 없는 가격에 살 수 있어요.",
+    "desc_ja": "韓国のファストファッションブランド「TOPTEN10（トップテン）」の大型店。2026年10月23日にオープンしたばかり。ニットやスウェットなどの定番服が手ごろな値段で買えます。",
+    "hours_ja": "",
+    "hours_ko": "",
+    "naver_url": "https://naver.me/5FmStM6D",
+    "photos": [
+      "images/topten/1-entrance.jpg",
+      "images/topten/2-floor.jpg",
+      "images/topten/3-floor2.jpg",
+      "images/topten/4-knit.jpg",
+      "images/topten/5-building.jpg"
+    ],
+    "menu": []
   }
 ]
