@@ -1431,5 +1431,21 @@
       "images/centerpeace/1-storefront.jpg"
     ],
     "menu": []
+  },
+  {
+    "id": "oliveyoung-daegu-town",
+    "area_id": "dongseongno",
+    "category": "shop",
+    "name_ko": "올리브영 대구타운",
+    "name_ja": "オリーブヤング 大邱タウン（OLIVE YOUNG）",
+    "desc_ko": "한국 화장품·뷰티 쇼핑의 필수 코스, 올리브영의 대형 매장. 스킨케어, 메이크업, 마스크팩까지 한 번에 둘러볼 수 있어요.",
+    "desc_ja": "韓国コスメを買うならここ、オリーブヤングの大型店。スキンケアやメイク、パックまでまとめて見て回れます。",
+    "hours_ja": "",
+    "hours_ko": "",
+    "naver_url": "https://naver.me/5FmSw10z",
+    "photos": [
+      "images/oliveyoung/1-storefront.jpg"
+    ],
+    "menu": []
   }
 ]
