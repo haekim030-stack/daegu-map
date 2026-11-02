@@ -1483,5 +1483,23 @@
       "images/topten/5-building.jpg"
     ],
     "menu": []
+  },
+  {
+    "id": "musinsa-daegu",
+    "area_id": "dongseongno",
+    "category": "shop",
+    "name_ko": "무신사 스토어 대구",
+    "name_ja": "ムシンサ ストア 大邱（MUSINSA）",
+    "desc_ko": "한국 최대 패션 플랫폼 무신사의 오프라인 매장. 여러 한국 브랜드 옷과, 벽 한가득 진열된 스니커즈를 직접 보고 입어볼 수 있어요.",
+    "desc_ja": "韓国最大級のファッション通販「MUSINSA（ムシンサ）」の実店舗。いろいろな韓国ブランドの服や、壁一面に並ぶスニーカーを実際に見て試着できます。",
+    "hours_ja": "",
+    "hours_ko": "",
+    "naver_url": "https://naver.me/57VZVs8d",
+    "photos": [
+      "images/musinsa/1-exterior.jpg",
+      "images/musinsa/2-floor.jpg",
+      "images/musinsa/3-sneakers.jpg"
+    ],
+    "menu": []
   }
 ]
