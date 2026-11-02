@@ -1415,5 +1415,21 @@
       "images/anyonemore/5-floor2.jpg"
     ],
     "menu": []
+  },
+  {
+    "id": "centerpeace-dongseongno",
+    "area_id": "dongseongno",
+    "category": "shop",
+    "name_ko": "센터피스 (CENTERPEACE)",
+    "name_ja": "センターピース（CENTERPEACE）",
+    "desc_ko": "초록 로고가 눈에 띄는 패션 편집숍. 여러 브랜드 옷과 소품을 한곳에서 둘러볼 수 있어요.",
+    "desc_ja": "緑のロゴが目印のファッションセレクトショップ。いろいろなブランドの服や小物をまとめて見て回れます。",
+    "hours_ja": "",
+    "hours_ko": "",
+    "naver_url": "https://naver.me/5jJadHEg",
+    "photos": [
+      "images/centerpeace/1-storefront.jpg"
+    ],
+    "menu": []
   }
 ]
