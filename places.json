@@ -395,7 +395,8 @@
     ],
     "menu": [],
     "address_ko": "대구 중구 중앙대로 455-2 2층 1호",
-    "naver_url": "https://naver.me/FBMFVoPh"
+    "naver_url": "https://naver.me/FBMFVoPh",
+    "sub": "goods"
   },
   {
     "id": "eommabapsang-main",
@@ -714,7 +715,8 @@
     "photos": [
       "images/shinsegae/1-exterior.jpg"
     ],
-    "menu": []
+    "menu": [],
+    "sub": "dept"
   },
   {
     "id": "frank-plank",
@@ -1006,7 +1008,8 @@
       "images/sasaroun/2-tapes.jpg",
       "images/sasaroun/3-notebooks.jpg"
     ],
-    "menu": []
+    "menu": [],
+    "sub": "goods"
   },
   {
     "id": "gulliver-makchang",
@@ -1414,7 +1417,8 @@
       "images/anyonemore/4-floor.jpg",
       "images/anyonemore/5-floor2.jpg"
     ],
-    "menu": []
+    "menu": [],
+    "sub": "fashion"
   },
   {
     "id": "centerpeace-dongseongno",
@@ -1430,7 +1434,8 @@
     "photos": [
       "images/centerpeace/1-storefront.jpg"
     ],
-    "menu": []
+    "menu": [],
+    "sub": "fashion"
   },
   {
     "id": "oliveyoung-daegu-town",
@@ -1446,7 +1451,8 @@
     "photos": [
       "images/oliveyoung/1-storefront.jpg"
     ],
-    "menu": []
+    "menu": [],
+    "sub": "beauty"
   },
   {
     "id": "mixxo-dongseongno",
@@ -1462,7 +1468,8 @@
     "photos": [
       "images/mixxo/1-storefront.jpg"
     ],
-    "menu": []
+    "menu": [],
+    "sub": "fashion"
   },
   {
     "id": "topten-dongseongno",
@@ -1482,7 +1489,8 @@
       "images/topten/4-knit.jpg",
       "images/topten/5-building.jpg"
     ],
-    "menu": []
+    "menu": [],
+    "sub": "fashion"
   },
   {
     "id": "musinsa-daegu",
@@ -1500,7 +1508,8 @@
       "images/musinsa/2-floor.jpg",
       "images/musinsa/3-sneakers.jpg"
     ],
-    "menu": []
+    "menu": [],
+    "sub": "fashion"
   },
   {
     "id": "thehyundai-daegu",
@@ -1519,7 +1528,8 @@
       "images/thehyundai/2-plaza.jpg",
       "images/thehyundai/3-sculpture.jpg"
     ],
-    "menu": []
+    "menu": [],
+    "sub": "dept"
   },
   {
     "id": "8seconds-dongseongno",
@@ -1536,6 +1546,7 @@
       "images/8seconds/1-storefront.jpg",
       "images/8seconds/2-floor.jpg"
     ],
-    "menu": []
+    "menu": [],
+    "sub": "fashion"
   }
 ]
