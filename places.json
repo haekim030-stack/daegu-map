@@ -1322,8 +1322,8 @@
     "category": "restaurant",
     "name_ko": "중앙떡볶이",
     "name_ja": "中央トッポッキ（チュンアン・トッポッキ）",
-    "desc_ko": "1979년에 문을 연 2·28공원 옆 떡볶이 노포. 분점 없이 이곳 하나뿐인 '대구 명물 떡볶이집'으로, 쌀떡볶이에 만두를 섞어 먹는 게 유명해요. 포장하면 용기값 500원이 추가돼요.",
-    "desc_ja": "1979年創業、2・28記念公園のそばにある老舗のトッポッキ店。支店はなくここだけの「大邱名物トッポッキ」で、米粉のトッポッキにマンドゥ（揚げ餃子）を混ぜて食べるのが定番です。テイクアウトは容器代500ウォンが追加されます。",
+    "desc_ko": "1979년에 문을 연 2·28공원 옆 떡볶이 노포. 분점 없이 이곳 하나뿐인 '대구 명물 떡볶이집'으로, 쌀떡볶이에 납작만두를 섞어 먹는 게 유명해요. 포장하면 용기값 500원이 추가돼요.",
+    "desc_ja": "1979年創業、2・28記念公園のそばにある老舗のトッポッキ店。支店はなくここだけの「大邱名物トッポッキ」で、米粉のトッポッキにナプチャクマンドゥ（薄い焼き餃子）を混ぜて食べるのが定番です。テイクアウトは容器代500ウォンが追加されます。",
     "hours_ja": "",
     "hours_ko": "",
     "naver_url": "https://naver.me/xq3aUHYP",
@@ -1336,8 +1336,8 @@
       {
         "section_ko": "분식",
         "section_ja": "粉食（軽食）",
-        "name_ko": "쌀떡볶이 + 만두 (섞어 1인분)",
-        "name_ja": "トッポッキ＋マンドゥ（ミックス1人前）",
+        "name_ko": "쌀떡볶이 + 납작만두 (섞어 1인분)",
+        "name_ja": "トッポッキ＋ナプチャクマンドゥ（ミックス1人前）",
         "price": 5000,
         "photo": "images/jungang-tteok/1-tteokbokki.jpg",
         "desc_ko": "",
@@ -1357,8 +1357,8 @@
       {
         "section_ko": "분식",
         "section_ja": "粉食（軽食）",
-        "name_ko": "만두",
-        "name_ja": "マンドゥ（揚げ餃子）",
+        "name_ko": "납작만두",
+        "name_ja": "ナプチャクマンドゥ（薄い焼き餃子）",
         "price": 5000,
         "photo": "",
         "desc_ko": "",
@@ -1395,5 +1395,25 @@
         "desc_ja": ""
       }
     ]
+  },
+  {
+    "id": "anyonemore-dongseongno",
+    "area_id": "dongseongno",
+    "category": "shop",
+    "name_ko": "애니원모어 동성로 대구점",
+    "name_ja": "エニワンモア（anyonemore）東城路 大邱店",
+    "desc_ko": "하얀 외관이 눈에 띄는 패션 편집숍. 고양이 콘셉트로 꾸민 공간 'CATS HOTEL'이 있어서 옷 구경하면서 사진 찍기도 좋아요.",
+    "desc_ja": "白い外観が目を引くファッションのセレクトショップ。猫をテーマにした空間「CATS HOTEL」もあって、服を見ながら写真を撮るのも楽しいお店です。",
+    "hours_ja": "",
+    "hours_ko": "",
+    "naver_url": "https://naver.me/GJTgauwe",
+    "photos": [
+      "images/anyonemore/1-exterior.jpg",
+      "images/anyonemore/2-entrance.jpg",
+      "images/anyonemore/3-cats-hotel.jpg",
+      "images/anyonemore/4-floor.jpg",
+      "images/anyonemore/5-floor2.jpg"
+    ],
+    "menu": []
   }
 ]
