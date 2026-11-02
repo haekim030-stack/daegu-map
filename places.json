@@ -1501,5 +1501,24 @@
       "images/musinsa/3-sneakers.jpg"
     ],
     "menu": []
+  },
+  {
+    "id": "thehyundai-daegu",
+    "area_id": "dongseongno",
+    "category": "shop",
+    "name_ko": "더현대 대구 (현대백화점)",
+    "name_ja": "ザ・現代 大邱（現代百貨店）",
+    "desc_ko": "동성로 입구, 반월당역 근처에 있는 대형 백화점. 건물 앞 광장의 큰 조형물이 포토 스폿이에요. 지하 1층에 이 지도에도 있는 '금금'이 있어요.",
+    "desc_ja": "東城路の入り口、半月堂駅の近くにある大型デパート。建物前の広場にある大きなオブジェは写真スポット。地下1階には、このマップにも載っている「クムクム」があります。",
+    "hours_ja": "",
+    "hours_ko": "",
+    "address_ko": "대구 중구 달구벌대로 2077",
+    "naver_url": "https://naver.me/xGIoZI8c",
+    "photos": [
+      "images/thehyundai/1-night.jpg",
+      "images/thehyundai/2-plaza.jpg",
+      "images/thehyundai/3-sculpture.jpg"
+    ],
+    "menu": []
   }
 ]
